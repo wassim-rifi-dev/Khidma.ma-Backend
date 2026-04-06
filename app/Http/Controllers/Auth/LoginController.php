@@ -39,13 +39,15 @@ class LoginController extends Controller
             $professional = $professionalServices->getProfessionalInfo($user->id);
         }
 
+        $token = $user->createToken('auth-token')->plainTextToken;
+
         if ($professional) {
             return response()->json([
                 "success" => true,
                 "data" => [
                     "user" => $user,
                     "professional" => $professional,
-                    // "token" => $token
+                    "token" => $token
                 ],
                 "message" => "Bonjour $user->name, votre compt professionnal creer en succe"
             ], 201);
@@ -55,49 +57,9 @@ class LoginController extends Controller
             "success" => true,
             "data" => [
                 "user" => $user,
-                // "token" => $token
+                "token" => $token
             ],
             "message" => "Bonjour $user->name, votre compt creer en succe"
         ], 201);
     }
-
-    // public function login(LoginRequest $loginRequest , AuthServices $authServices) {
-    //     $user = $authServices->existeEmail($loginRequest->email);
-
-    //     if (!$user) {
-    //         return response()->json(
-    //             [
-    //                 "success" => false,
-    //                 "data" => [],
-    //                 "message" => "Acune utilisateur existe avec cet email."
-    //             ],
-    //             401
-    //         );
-    //     }
-
-    //     if (!Hash::check($loginRequest->password , $user->password)) {
-    //         return response()->json(
-    //             [
-    //                 "success" => false,
-    //                 "data" => [],
-    //                 "message" => "Mot de passe est incorrect"
-    //             ],
-    //             401
-    //         );
-    //     }
-
-    //     $token = $user->createToken('auth-token')->plainTextToken;
-
-    //     return response()->json(
-    //         [
-    //             "success" => true,
-    //             "data" => [
-    //                 'user' => $user,
-    //                 'token' => $token
-    //             ],
-    //             "message" => "Bonjour $user->name"
-    //         ],
-    //         200
-    //     );
-    // }
 }
