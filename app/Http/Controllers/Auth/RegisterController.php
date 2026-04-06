@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Services\AuthServices;
+use App\Services\ProfessionalServices;
 use Hash;
 use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
-    public function register(RegisterRequest $registerRequest , AuthServices $authServices) {
+    public function register(RegisterRequest $registerRequest , AuthServices $authServices, ProfessionalServices $professionalServices) {
         $existeUser = $authServices->existeEmail($registerRequest->email);
         if ($existeUser) {
             return response()->json(
@@ -32,7 +33,30 @@ class RegisterController extends Controller
         ];
 
         $user = $authServices->createNewUser($data);
+
+        if ($user->role === 'professional') {
+            $professionalData = [
+                'user_id' => $user->id,
+                'category' => $registerRequest->category,
+                'city' => $registerRequest->city
+            ];
+
+            $professional = $professionalServices->create($professionalData);
+        }
+
         $token = $user->createToken('auth-token')->plainTextToken;
+
+        if ($professional) {
+            return response()->json([
+                "success" => true,
+                "data" => [
+                    "user" => $user,
+                    "professional" => $professional,
+                    "token" => $token
+                ],
+                "message" => "Bonjour $user->name, votre compt professionnal creer en succe"
+            ], 201);
+        }
 
         return response()->json([
             "success" => true,
