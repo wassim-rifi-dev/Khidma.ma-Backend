@@ -29,6 +29,9 @@ class RegisterRequest extends FormRequest
             'role' => 'required|string|in:client,professional',
             'password' => 'required|string|min:8|confirmed',
             'password_confirmation' => 'required|string',
+            'user_id'  => 'nullable|integer|exists:users,id',
+            'category' => 'nullable|string|in:plumbing,electrical,painting,carpentry,ac_repair,appliance',
+            'city'     => 'nullable|string|max:100',
         ];
     }
 }
