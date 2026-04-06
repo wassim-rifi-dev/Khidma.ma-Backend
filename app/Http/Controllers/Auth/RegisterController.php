@@ -11,7 +11,8 @@ use Illuminate\Http\Request;
 class RegisterController extends Controller
 {
     public function register(RegisterRequest $registerRequest , AuthServices $authServices) {
-        if ($authServices->existeEmail($registerRequest->email)) {
+        $existeUser = $authServices->existeEmail($registerRequest->email);
+        if ($existeUser) {
             return response()->json(
                 [
                     "success" => false,

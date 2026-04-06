@@ -6,7 +6,7 @@ use App\Models\User;
 
 class AuthServices {
     public function existeEmail(string $email) {
-        return User::where('email' , $email)->existe();
+        return User::where('email' , $email)->first();
     }
 
     public function createNewUser(array $data) {
