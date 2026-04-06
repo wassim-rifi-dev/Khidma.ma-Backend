@@ -5,11 +5,12 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Services\AuthServices;
+use App\Services\ProfessionalServices;
 use Hash;
 
 class LoginController extends Controller
 {
-    public function login(LoginRequest $loginRequest , AuthServices $authServices) {
+    public function login(LoginRequest $loginRequest , AuthServices $authServices , ProfessionalServices $professionalServices) {
         $user = $authServices->existeEmail($loginRequest->email);
 
         if (!$user) {
@@ -34,16 +35,30 @@ class LoginController extends Controller
             );
         }
 
-        return response()->json(
-            [
+        if ($user->role === 'professional') {
+            $professional = $professionalServices->getProfessionalInfo($user->id);
+        }
+
+        if ($professional) {
+            return response()->json([
                 "success" => true,
                 "data" => [
-                    'user' => $user
+                    "user" => $user,
+                    "professional" => $professional,
+                    // "token" => $token
                 ],
-                "message" => "Bonjour $user->name"
+                "message" => "Bonjour $user->name, votre compt professionnal creer en succe"
+            ], 201);
+        }
+
+        return response()->json([
+            "success" => true,
+            "data" => [
+                "user" => $user,
+                // "token" => $token
             ],
-            200
-        );
+            "message" => "Bonjour $user->name, votre compt creer en succe"
+        ], 201);
     }
 
     // public function login(LoginRequest $loginRequest , AuthServices $authServices) {
