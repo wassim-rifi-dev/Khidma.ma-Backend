@@ -20,4 +20,6 @@ class ProfessionalProfile extends Controller
             ]
         ] , 200);
     }
+
+    
 }
