@@ -19,6 +19,7 @@ return new class extends Migration
             $table->enum('role' , ['client' , 'professional' , 'admin']);
             $table->boolean('is_active')->default(true);
             $table->string('password');
+            $table->string('photo')->nullable();
             $table->timestamps();
         });
 
