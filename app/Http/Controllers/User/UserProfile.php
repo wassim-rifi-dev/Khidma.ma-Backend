@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\updateUserRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class UserProfile extends Controller
 {
@@ -12,14 +13,29 @@ class UserProfile extends Controller
         $user = $updateUserRequest->user();
         $data = $updateUserRequest->validated();
 
+        if ($updateUserRequest->hasFile('photo')) {
+            if ($user->photo && Storage::disk('public')->exists($user->photo)) {
+                Storage::disk('public')->delete($user->photo);
+            }
+
+            $path = $updateUserRequest->file('photo')->store('users/photos', 'public');
+            $data['photo'] = $path;
+        }
+
         $user->update($data);
+
+        $freshUser = $user->fresh(); // ✅ query واحدة
 
         return response()->json([
             'success' => true,
-            'data'    => [
-                'user' => $user->fresh(),
-            ],
             'message' => 'Profile updated successfully',
+            'data'    => [
+                'user' => array_merge($freshUser->toArray(), [
+                    'photo_url' => $freshUser->photo
+                        ? asset('storage/' . $freshUser->photo)
+                        : null,
+                ]),
+            ],
         ], 200);
     }
 }

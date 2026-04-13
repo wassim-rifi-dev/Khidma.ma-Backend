@@ -22,7 +22,7 @@ Route::middleware('auth:sanctum')->group(function() {
     // Auth
     Route::post('logout' , [LogoutController::class , 'logout']); // Logout
 
-    Route::post('user/profile/update' , [UserProfile::class , 'update']); // update user profile
+    Route::put('user/profile/update' , [UserProfile::class , 'update']); // update user profile
 
     Route::middleware('role:admin')->group(function() {});
 
