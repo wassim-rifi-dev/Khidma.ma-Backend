@@ -24,14 +24,14 @@ class UserProfile extends Controller
 
         $user->update($data);
 
-        $freshUser = $user->fresh(); // ✅ query واحدة
+        $freshUser = $user->fresh();
 
         return response()->json([
             'success' => true,
             'message' => 'Profile updated successfully',
             'data'    => [
                 'user' => array_merge($freshUser->toArray(), [
-                    'photo_url' => $freshUser->photo
+                    'photo' => $freshUser->photo
                         ? asset('storage/' . $freshUser->photo)
                         : null,
                 ]),
