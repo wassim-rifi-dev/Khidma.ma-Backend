@@ -35,11 +35,14 @@ class LoginController extends Controller
             );
         }
 
+        $token = $user->createToken('auth-token')->plainTextToken;
+
+        $professional = null;
+
         if ($user->role === 'professional') {
             $professional = $professionalServices->getProfessionalInfo($user->id);
         }
 
-        $token = $user->createToken('auth-token')->plainTextToken;
 
         if ($professional) {
             return response()->json([
