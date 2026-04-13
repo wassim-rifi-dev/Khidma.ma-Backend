@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Professional;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Professional\updateProfissionalProfile;
 use App\Http\Requests\User\updateUserRequest;
 use App\Services\ProfessionalServices;
 use Illuminate\Http\Request;
@@ -20,5 +21,21 @@ class ProfessionalProfile extends Controller
                 'professional' => $professional
             ]
         ] , 200);
+    }
+
+    public function update(updateProfissionalProfile $request , ProfessionalServices $professionalServices) {
+        $user = $request->user();
+
+        $professional = $professionalServices->getProfessionalInfo((int) $user->id);
+
+        $professional->update($request->validated());
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Professional profile updated successfully',
+            'data'    => [
+                'professional' => $professional->fresh(),
+            ],
+        ], 200);
     }
 }
