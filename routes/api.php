@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Professional\ProfessionalProfile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,5 +25,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::middleware('role:client')->group(function() {});
 
-    Route::middleware('role:professional')->group(function() {});
+    Route::middleware('role:professional')->group(function() {
+        Route::get('profissional/profile' , [ProfessionalProfile::class , 'show']);
+    });
 });
