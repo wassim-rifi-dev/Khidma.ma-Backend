@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Professional;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\updateUserRequest;
 use App\Services\ProfessionalServices;
 use Illuminate\Http\Request;
 
@@ -20,6 +21,4 @@ class ProfessionalProfile extends Controller
             ]
         ] , 200);
     }
-
-    
 }
