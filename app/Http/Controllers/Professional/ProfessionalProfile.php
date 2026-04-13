@@ -10,7 +10,7 @@ class ProfessionalProfile extends Controller
 {
     public function show(Request $request , ProfessionalServices $professionalServices) {
         $user = $request->user();
-        $professional = $professionalServices->getProfessionalInfo((int) $user->is);
+        $professional = $professionalServices->getProfessionalInfo((int) $user->id);
 
         return response()->json([
             'success' => true,
