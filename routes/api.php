@@ -22,15 +22,18 @@ Route::middleware('auth:sanctum')->group(function() {
     // Auth
     Route::post('logout' , [LogoutController::class , 'logout']); // Logout
 
+    Route::get('user/profile' , [UserProfile::class , 'show']); // show user profile
     Route::put('user/profile/update' , [UserProfile::class , 'update']); // update user profile
 
     Route::middleware('role:admin')->group(function() {});
 
-    Route::middleware('role:client')->group(function() {});
+    Route::middleware('role:client')->group(function() {
+
+    });
 
     Route::middleware('role:professional')->group(function() {
         Route::get('profissional/profile' , [ProfessionalProfile::class , 'show']); // show profissional profile
-        
+
         Route::put('professional/profile/update' , [ProfessionalProfile::class , 'update']); // update profissional profile
     });
 });

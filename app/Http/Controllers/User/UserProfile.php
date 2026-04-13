@@ -9,6 +9,26 @@ use Illuminate\Support\Facades\Storage;
 
 class UserProfile extends Controller
 {
+    public function show(Request $request) {
+        $user = $request->user();
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'data' => [],
+                'message' => "Vous n'avez pas login"
+            ], 401);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'user' => $user,
+            ],
+            'message' => "C'est sa vos info"
+        ], 200);
+    }
+
     public function update(updateUserRequest $updateUserRequest) {
         $user = $updateUserRequest->user();
         $data = $updateUserRequest->validated();
