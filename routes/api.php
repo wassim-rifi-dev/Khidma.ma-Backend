@@ -19,4 +19,10 @@ Route::post('login' , [LoginController::class , 'login']); // Login
 Route::middleware('auth:sanctum')->group(function() {
     // Auth
     Route::post('logout' , [LogoutController::class , 'logout']); // Logout
+
+    Route::middleware('role:admin')->group(function() {});
+
+    Route::middleware('role:client')->group(function() {});
+
+    Route::middleware('role:professional')->group(function() {});
 });
