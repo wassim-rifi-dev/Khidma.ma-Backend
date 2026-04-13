@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->enum('category' , ['plumbing' , 'electrical' , 'painting' , 'carpentry' , 'ac_repair' , 'appliance']);
             $table->string('city');
+            $table->text('description');
             $table->timestamps();
         });
     }
