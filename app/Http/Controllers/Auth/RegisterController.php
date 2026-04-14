@@ -46,7 +46,7 @@ class RegisterController extends Controller
 
         $token = $user->createToken('auth-token')->plainTextToken;
 
-        if ($professional) {
+        if ($user->role === 'professional') {
             return response()->json([
                 "success" => true,
                 "data" => [
