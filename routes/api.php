@@ -36,10 +36,11 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::get('profissional/profile' , [ProfessionalProfile::class , 'show']); // show profissional profile
         Route::put('professional/profile/update' , [ProfessionalProfile::class , 'update']); // update profissional profile
 
-
         /* Services */
+        Route::get('service/trashed' , [ServiceController::class , 'trashed']); // show deleted services
         Route::post('service/store' , [ServiceController::class , 'store']); // create service
         Route::put('service/update/{id}' , [ServiceController::class , 'update']); // update service
         Route::delete('service/delete/{id}' , [ServiceController::class , 'destroy']); // delete service
+        Route::put('service/restore/{id}' , [ServiceController::class , 'restore']); // restore service
     });
 });

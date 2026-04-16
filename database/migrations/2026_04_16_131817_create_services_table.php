@@ -21,6 +21,7 @@ return new class extends Migration
             $table->float('price_min')->default(0.00);
             $table->float('price_max');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

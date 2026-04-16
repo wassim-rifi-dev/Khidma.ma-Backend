@@ -27,4 +27,20 @@ class ServiceServices {
     public function deleteService(Service $service) {
         return $service->delete();
     }
+
+    public function getDeletedServicesByProfessional(int $professionalId) {
+        return Service::onlyTrashed()
+            ->where('professional_id', $professionalId)
+            ->get();
+    }
+
+    public function getDeletedServiceById(int $id) {
+        return Service::onlyTrashed()->find($id);
+    }
+
+    public function restoreService(Service $service) {
+        $service->restore();
+
+        return $service->fresh();
+    }
 }

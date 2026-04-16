@@ -21,6 +21,28 @@ class ServiceController extends Controller
         ], 201);
     }
 
+    public function trashed(ServiceServices $serviceServices, ProfessionalServices $professionalServices) {
+        $professional = $professionalServices->getProfessionalInfo((int) request()->user()->id);
+
+        if (!$professional) {
+            return response()->json([
+                'success' => false,
+                'data' => [],
+                'message' => 'Professional profile not found'
+            ], 404);
+        }
+
+        $services = $serviceServices->getDeletedServicesByProfessional($professional->id);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'services' => $services,
+            ],
+            'message' => 'Deleted services retrieved successfully'
+        ], 200);
+    }
+
     public function store(StoreServiceRequest $request, ServiceServices $serviceServices, ProfessionalServices $professionalServices) {
         $professional = $professionalServices->getProfessionalInfo((int) $request->user()->id);
 
@@ -123,6 +145,46 @@ class ServiceController extends Controller
             'success' => true,
             'data' => [],
             'message' => 'Service deleted successfully'
+        ], 200);
+    }
+
+    public function restore(int $id, ServiceServices $serviceServices, ProfessionalServices $professionalServices) {
+        $professional = $professionalServices->getProfessionalInfo((int) request()->user()->id);
+
+        if (!$professional) {
+            return response()->json([
+                'success' => false,
+                'data' => [],
+                'message' => 'Professional profile not found'
+            ], 404);
+        }
+
+        $service = $serviceServices->getDeletedServiceById($id);
+
+        if (!$service) {
+            return response()->json([
+                'success' => false,
+                'data' => [],
+                'message' => 'Deleted service not found'
+            ], 404);
+        }
+
+        if ($service->professional_id !== $professional->id) {
+            return response()->json([
+                'success' => false,
+                'data' => [],
+                'message' => 'Unauthorized'
+            ], 403);
+        }
+
+        $restoredService = $serviceServices->restoreService($service);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'service' => $restoredService,
+            ],
+            'message' => 'Service restored successfully'
         ], 200);
     }
 }
