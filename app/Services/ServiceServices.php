@@ -23,4 +23,8 @@ class ServiceServices {
 
         return $service->fresh();
     }
+
+    public function deleteService(Service $service) {
+        return $service->delete();
+    }
 }

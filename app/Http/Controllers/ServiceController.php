@@ -87,4 +87,42 @@ class ServiceController extends Controller
             'message' => 'Service updated successfully'
         ], 200);
     }
+
+    public function destroy(int $id, ServiceServices $serviceServices, ProfessionalServices $professionalServices) {
+        $professional = $professionalServices->getProfessionalInfo((int) request()->user()->id);
+
+        if (!$professional) {
+            return response()->json([
+                'success' => false,
+                'data' => [],
+                'message' => 'Professional profile not found'
+            ], 404);
+        }
+
+        $service = $serviceServices->getServiceById($id);
+
+        if (!$service) {
+            return response()->json([
+                'success' => false,
+                'data' => [],
+                'message' => 'Service not found'
+            ], 404);
+        }
+
+        if ($service->professional_id !== $professional->id) {
+            return response()->json([
+                'success' => false,
+                'data' => [],
+                'message' => 'Unauthorized'
+            ], 403);
+        }
+
+        $serviceServices->deleteService($service);
+
+        return response()->json([
+            'success' => true,
+            'data' => [],
+            'message' => 'Service deleted successfully'
+        ], 200);
+    }
 }

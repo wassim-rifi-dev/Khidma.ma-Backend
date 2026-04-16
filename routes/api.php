@@ -26,15 +26,11 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('user/profile' , [UserProfile::class , 'show']); // show user profile
     Route::put('user/profile/update' , [UserProfile::class , 'update']); // update user profile
 
-    /* Services */
-    Route::get('services' , [ServiceController::class , 'index']); // showw all services
+    Route::get('services' , [ServiceController::class , 'index']); // showw all service
 
-    
     Route::middleware('role:admin')->group(function() {});
 
-    Route::middleware('role:client')->group(function() {
-
-    });
+    Route::middleware('role:client')->group(function() {});
 
     Route::middleware('role:professional')->group(function() {
         Route::get('profissional/profile' , [ProfessionalProfile::class , 'show']); // show profissional profile
