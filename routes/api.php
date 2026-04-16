@@ -34,13 +34,12 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::middleware('role:professional')->group(function() {
         Route::get('profissional/profile' , [ProfessionalProfile::class , 'show']); // show profissional profile
-
         Route::put('professional/profile/update' , [ProfessionalProfile::class , 'update']); // update profissional profile
 
 
         /* Services */
         Route::post('service/store' , [ServiceController::class , 'store']); // create service
-
         Route::put('service/update/{id}' , [ServiceController::class , 'update']); // update service
+        Route::delete('service/delete/{id}' , [ServiceController::class , 'destroy']); // delete service
     });
 });
