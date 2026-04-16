@@ -7,7 +7,7 @@ class professional extends Model
 {
     protected $fillable = [
         'user_id',
-        'category',
+        'categorie_id',
         'city'
     ];
 
@@ -19,5 +19,10 @@ class professional extends Model
     public function services()
     {
         return $this->hasMany(Service::class, 'professional_id');
+    }
+
+    public function categorie()
+    {
+        return $this->belongsTo(Categories::class, 'categorie_id');
     }
 }

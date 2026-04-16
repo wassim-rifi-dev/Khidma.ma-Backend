@@ -19,19 +19,9 @@ class ServiceController extends Controller
             ], 404);
         }
 
-        $category = $serviceServices->getCategoryByName($professional->category);
-
-        if (!$category) {
-            return response()->json([
-                'success' => false,
-                'data' => [],
-                'message' => 'Category not found'
-            ], 404);
-        }
-
         $data = array_merge($request->validated(), [
             'professional_id' => $professional->id,
-            'categorie_id' => $category->id,
+            'categorie_id' => $professional->categorie_id,
         ]);
 
         $service = $serviceServices->createServices($data);

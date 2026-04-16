@@ -35,9 +35,19 @@ class RegisterController extends Controller
         $user = $authServices->createNewUser($data);
 
         if ($user->role === 'professional') {
+            $category = $professionalServices->getCategoryByName($registerRequest->category);
+
+            if (!$category) {
+                return response()->json([
+                    "success" => false,
+                    "data" => [],
+                    "message" => "Category not found"
+                ], 404);
+            }
+
             $professionalData = [
                 'user_id' => $user->id,
-                'category' => $registerRequest->category,
+                'categorie_id' => $category->id,
                 'city' => $registerRequest->city
             ];
 
