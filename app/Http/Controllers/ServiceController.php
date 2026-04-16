@@ -6,11 +6,15 @@ use App\Http\Requests\Service\StoreServiceRequest;
 use App\Http\Requests\Service\UpdateServiceRequest;
 use App\Services\ProfessionalServices;
 use App\Services\ServiceServices;
+use Illuminate\Http\Request;
 
 class ServiceController extends Controller
 {
-    public function index(ServiceServices $serviceServices) {
-        $services = $serviceServices->getAllServices();
+    public function index(Request $request, ServiceServices $serviceServices) {
+        $perPage = (int) $request->query('per_page', 10);
+        $perPage = $perPage > 0 ? min($perPage, 50) : 10;
+
+        $services = $serviceServices->getAllServices($perPage);
 
         return response()->json([
             'success' => true,

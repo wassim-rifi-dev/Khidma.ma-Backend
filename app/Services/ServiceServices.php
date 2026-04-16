@@ -10,8 +10,8 @@ class ServiceServices {
         return Service::create($data);
     }
 
-    public function getAllServices() {
-        return Service::all();
+    public function getAllServices(int $perPage = 10) {
+        return Service::paginate($perPage);
     }
 
     public function getServiceById(int $id) {
