@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Professional\ProfessionalProfile;
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\User\UserProfile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -35,5 +36,7 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::get('profissional/profile' , [ProfessionalProfile::class , 'show']); // show profissional profile
 
         Route::put('professional/profile/update' , [ProfessionalProfile::class , 'update']); // update profissional profile
+        
+        Route::post('service/store' , [ServiceController::class , 'store']); // create service
     });
 });
