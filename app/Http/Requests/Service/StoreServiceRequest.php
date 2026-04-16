@@ -23,7 +23,6 @@ class StoreServiceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'categorie_id' => 'required|integer|exists:categories,id',
             'city' => 'required|string|max:255',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
