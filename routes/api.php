@@ -26,8 +26,10 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('user/profile' , [UserProfile::class , 'show']); // show user profile
     Route::put('user/profile/update' , [UserProfile::class , 'update']); // update user profile
 
+    /* Services */
     Route::get('services' , [ServiceController::class , 'index']); // showw all services
 
+    
     Route::middleware('role:admin')->group(function() {});
 
     Route::middleware('role:client')->group(function() {
@@ -39,6 +41,10 @@ Route::middleware('auth:sanctum')->group(function() {
 
         Route::put('professional/profile/update' , [ProfessionalProfile::class , 'update']); // update profissional profile
 
+
+        /* Services */
         Route::post('service/store' , [ServiceController::class , 'store']); // create service
+
+        Route::put('service/update/{id}' , [ServiceController::class , 'update']); // update service
     });
 });
