@@ -9,4 +9,8 @@ class ServiceServices {
     public function createServices(array $data) {
         return Service::create($data);
     }
+
+    public function getAllServices() {
+        return Service::all();
+    }
 }

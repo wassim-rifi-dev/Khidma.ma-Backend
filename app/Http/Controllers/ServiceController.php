@@ -8,6 +8,18 @@ use App\Services\ServiceServices;
 
 class ServiceController extends Controller
 {
+    public function index(ServiceServices $serviceServices) {
+        $services = $serviceServices->getAllServices();
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'services' => $services,
+            ],
+            'message' => `C'est sa les services`
+        ], 201);
+    }
+
     public function store(StoreServiceRequest $request, ServiceServices $serviceServices, ProfessionalServices $professionalServices) {
         $professional = $professionalServices->getProfessionalInfo((int) $request->user()->id);
 
