@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('city');
             $table->string('title');
             $table->text('description')->nullable();
-            $table->float('price_min ')->default(0.00);
+            $table->float('price_min')->default(0.00);
             $table->float('price_max');
             $table->timestamps();
         });
