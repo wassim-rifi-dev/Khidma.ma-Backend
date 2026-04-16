@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
 class professional extends Model
 {
     protected $fillable = [
@@ -11,4 +10,14 @@ class professional extends Model
         'category',
         'city'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function services()
+    {
+        return $this->hasMany(Service::class, 'professional_id');
+    }
 }

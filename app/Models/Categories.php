@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Categories extends Model
 {
@@ -11,7 +10,7 @@ class Categories extends Model
         'name'
     ];
 
-    public function services(): HasMany
+    public function services()
     {
         return $this->hasMany(Service::class, 'categorie_id');
     }
