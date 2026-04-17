@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Professional\ProfessionalProfile;
+use App\Http\Controllers\RequestController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\User\UserProfile;
 use Illuminate\Http\Request;
@@ -30,7 +31,9 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::middleware('role:admin')->group(function() {});
 
-    Route::middleware('role:client')->group(function() {});
+    Route::middleware('role:client')->group(function() {
+        Route::post('request/store/{serviceId}' , [RequestController::class , 'store']); // create request
+    });
 
     Route::middleware('role:professional')->group(function() {
         Route::get('profissional/profile' , [ProfessionalProfile::class , 'show']); // show profissional profile
