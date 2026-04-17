@@ -28,4 +28,12 @@ class MessageServices
     {
         return Messages::create($data);
     }
+
+    public function getAllChatMessages(int $chatId)
+    {
+        return Messages::with('sender')
+            ->where('chat_id', $chatId)
+            ->oldest()
+            ->get();
+    }
 }

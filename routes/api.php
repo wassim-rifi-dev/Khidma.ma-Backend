@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\MessagesController;
 use App\Http\Controllers\Professional\ProfessionalProfile;
 use App\Http\Controllers\RequestController;
@@ -30,6 +31,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::put('user/profile/update' , [UserProfile::class , 'update']); // update user profile
 
     Route::get('services' , [ServiceController::class , 'index']); // showw all service
+    Route::get('chat/{chatId}' , [ChatController::class , 'index']); // show chat messages
     Route::post('message/store/{chatId}' , [MessagesController::class , 'store']); // create message
 
     Route::middleware('role:admin')->group(function() {});
