@@ -10,4 +10,32 @@ class ReviewServices
     {
         return Reviews::create($data);
     }
+
+    public function getServiceAverageRating(int $serviceId)
+    {
+        return (float) Reviews::whereHas('order', function ($query) use ($serviceId) {
+            $query->where('service_id', $serviceId);
+        })->avg('rating');
+    }
+
+    public function getProfessionalAverageRating(int $professionalId)
+    {
+        return (float) Reviews::whereHas('order.service', function ($query) use ($professionalId) {
+            $query->where('professional_id', $professionalId);
+        })->avg('rating');
+    }
+
+    public function getServiceReviewsCount(int $serviceId)
+    {
+        return Reviews::whereHas('order', function ($query) use ($serviceId) {
+            $query->where('service_id', $serviceId);
+        })->count();
+    }
+
+    public function getProfessionalReviewsCount(int $professionalId)
+    {
+        return Reviews::whereHas('order.service', function ($query) use ($professionalId) {
+            $query->where('professional_id', $professionalId);
+        })->count();
+    }
 }
