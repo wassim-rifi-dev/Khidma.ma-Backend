@@ -12,4 +12,12 @@ class Request extends Model
         'message',
         'status',
     ];
+
+    public function client() {
+        return $this->belongsTo(User::class, 'client_id');
+    }
+
+    public function service() {
+        return $this->belongsTo(Service::class, 'service_id');
+    }
 }

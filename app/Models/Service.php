@@ -3,8 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Service extends Model
@@ -29,5 +27,9 @@ class Service extends Model
     public function categorie()
     {
         return $this->belongsTo(Categories::class, 'categorie_id');
+    }
+
+    public function requests() {
+        return $this->hasMany(Request::class, 'service_id');
     }
 }
