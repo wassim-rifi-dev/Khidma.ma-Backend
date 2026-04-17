@@ -31,4 +31,8 @@ class User extends Authenticatable
     public function requests() {
         return $this->hasMany(Request::class, 'client_id');
     }
+
+    public function reviews() {
+        return $this->hasMany(Reviews::class, 'client_id');
+    }
 }

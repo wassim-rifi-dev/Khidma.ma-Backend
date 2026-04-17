@@ -12,4 +12,12 @@ class Reviews extends Model
         'rating',
         'comment',
     ];
+
+    public function order() {
+        return $this->belongsTo(Request::class, 'order_id');
+    }
+
+    public function client() {
+        return $this->belongsTo(User::class, 'client_id');
+    }
 }
