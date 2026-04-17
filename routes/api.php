@@ -38,6 +38,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::middleware('role:professional')->group(function() {
         Route::get('profissional/profile' , [ProfessionalProfile::class , 'show']); // show profissional profile
         Route::put('professional/profile/update' , [ProfessionalProfile::class , 'update']); // update profissional profile
+        Route::put('request/update-status/{id}' , [RequestController::class , 'updateStatus']); // update request status
 
         /* Services */
         Route::get('service/trashed' , [ServiceController::class , 'trashed']); // show deleted services
