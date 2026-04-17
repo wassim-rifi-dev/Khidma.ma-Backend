@@ -22,6 +22,29 @@ class RequestController extends Controller
         ], 200);
     }
 
+    public function professionalRequest(RequestServices $requestServices, ProfessionalServices $professionalServices)
+    {
+        $professional = $professionalServices->getProfessionalInfo((int) request()->user()->id);
+
+        if (!$professional) {
+            return response()->json([
+                'success' => false,
+                'data' => [],
+                'message' => 'Professional profile not found'
+            ], 404);
+        }
+
+        $requests = $requestServices->getProfessionalRequests($professional->id);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'requests' => $requests,
+            ],
+            'message' => 'Professional requests retrieved successfully'
+        ], 200);
+    }
+
     public function store(StoreRequestRequest $request, int $serviceId, RequestServices $requestServices)
     {
         $data = array_merge($request->validated(), [
