@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->float('price_min')->default(0.00);
             $table->float('price_max');
+            $table->float('rating')->default(0.00);
             $table->timestamps();
             $table->softDeletes();
         });
