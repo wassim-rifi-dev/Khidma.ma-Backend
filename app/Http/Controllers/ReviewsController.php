@@ -28,6 +28,14 @@ class ReviewsController extends Controller
             ], 403);
         }
 
+        if ($order->status !== 'Terminer') {
+            return response()->json([
+                'success' => false,
+                'data' => [],
+                'message' => 'Order en cours il ne termine pas'
+            ], 404);
+        }
+
         if ($order->review) {
             return response()->json([
                 'success' => false,
