@@ -6,5 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Request extends Model
 {
-    //
+    protected $fillable = [
+        'client_id',
+        'service_id',
+        'message',
+        'status',
+    ];
 }
