@@ -13,16 +13,16 @@ class ReviewServices
 
     public function getServiceAverageRating(int $serviceId)
     {
-        return (float) Reviews::whereHas('order', function ($query) use ($serviceId) {
+        return (float) (Reviews::whereHas('order', function ($query) use ($serviceId) {
             $query->where('service_id', $serviceId);
-        })->avg('rating');
+        })->avg('rating') ?? 0);
     }
 
     public function getProfessionalAverageRating(int $professionalId)
     {
-        return (float) Reviews::whereHas('order.service', function ($query) use ($professionalId) {
+        return (float) (Reviews::whereHas('order.service', function ($query) use ($professionalId) {
             $query->where('professional_id', $professionalId);
-        })->avg('rating');
+        })->avg('rating') ?? 0);
     }
 
     public function getServiceReviewsCount(int $serviceId)
