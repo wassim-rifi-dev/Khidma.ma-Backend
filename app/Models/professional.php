@@ -8,7 +8,8 @@ class professional extends Model
     protected $fillable = [
         'user_id',
         'categorie_id',
-        'city'
+        'city',
+        'rating'
     ];
 
     public function user()

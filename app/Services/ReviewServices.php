@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\professional;
 use App\Models\Reviews;
 
 class ReviewServices
@@ -37,5 +38,24 @@ class ReviewServices
         return Reviews::whereHas('order.service', function ($query) use ($professionalId) {
             $query->where('professional_id', $professionalId);
         })->count();
+    }
+
+    public function updateProfessionalRating(int $professionalId)
+    {
+        $professional = professional::find($professionalId);
+
+        if (!$professional) {
+            return response()->json([
+                'success' => false,
+                'data' => [],
+                'message' => 'Professional profile not found'
+            ], 404);
+        }
+
+        $professional->update([
+            'rating' => $this->getProfessionalAverageRating($professionalId),
+        ]);
+
+        return $professional->fresh();
     }
 }
