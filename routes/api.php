@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Professional\ProfessionalProfile;
 use App\Http\Controllers\RequestController;
+use App\Http\Controllers\ReviewsController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\User\UserProfile;
 use Illuminate\Http\Request;
@@ -34,6 +35,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::middleware('role:client')->group(function() {
         Route::get('client/request' , [RequestController::class , 'clientRequest']); // show client requests
         Route::post('request/store/{serviceId}' , [RequestController::class , 'store']); // create request
+        Route::post('review/store/{orderId}' , [ReviewsController::class , 'store']); // create review
     });
 
     Route::middleware('role:professional')->group(function() {
