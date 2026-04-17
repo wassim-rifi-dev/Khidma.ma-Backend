@@ -15,9 +15,7 @@ class ReviewServices
 
     public function getServiceReviews(int $serviceId)
     {
-        $service = Service::find($serviceId);
-
-        if (!$service) {
+        if (!Service::whereKey($serviceId)->exists()) {
             return null;
         }
 
@@ -25,6 +23,7 @@ class ReviewServices
             ->whereHas('order', function ($query) use ($serviceId) {
                 $query->where('service_id', $serviceId);
             })
+            ->latest()
             ->get();
     }
 
