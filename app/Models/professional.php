@@ -26,4 +26,9 @@ class professional extends Model
     {
         return $this->belongsTo(Categories::class, 'categorie_id');
     }
+
+    public function chats()
+    {
+        return $this->hasMany(Chat::class, 'professional_id');
+    }
 }
