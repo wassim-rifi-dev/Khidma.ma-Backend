@@ -50,8 +50,11 @@ class ReviewsController extends Controller
         ]);
 
         $review = $reviewServices->createReview($data);
-        
-        $reviewServices->updateProfessionalRating($order->service->professional_id);
+
+        if ($order->service) {
+            $reviewServices->updateServiceRating($order->service->id);
+            $reviewServices->updateProfessionalRating($order->service->professional_id);
+        }
 
         return response()->json([
             'success' => true,

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\professional;
+use App\Models\Service;
 use App\Models\Reviews;
 
 class ReviewServices
@@ -45,11 +46,7 @@ class ReviewServices
         $professional = professional::find($professionalId);
 
         if (!$professional) {
-            return response()->json([
-                'success' => false,
-                'data' => [],
-                'message' => 'Professional profile not found'
-            ], 404);
+            return null;
         }
 
         $professional->update([
@@ -57,5 +54,20 @@ class ReviewServices
         ]);
 
         return $professional->fresh();
+    }
+
+    public function updateServiceRating(int $serviceId)
+    {
+        $service = Service::find($serviceId);
+
+        if (!$service) {
+            return null;
+        }
+
+        $service->update([
+            'rating' => $this->getServiceAverageRating($serviceId),
+        ]);
+
+        return $service->fresh();
     }
 }

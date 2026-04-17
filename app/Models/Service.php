@@ -17,6 +17,7 @@ class Service extends Model
         'description',
         'price_min',
         'price_max',
+        'rating',
     ];
 
     public function professional()
