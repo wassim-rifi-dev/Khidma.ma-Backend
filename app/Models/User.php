@@ -27,16 +27,23 @@ class User extends Authenticatable
         return $this->hasOne(professional::class, 'user_id');
     }
 
-    public function requests() {
+    public function requests()
+    {
         return $this->hasMany(Request::class, 'client_id');
     }
 
-    public function reviews() {
+    public function reviews()
+    {
         return $this->hasMany(Reviews::class, 'client_id');
     }
 
     public function chats()
     {
         return $this->hasMany(Chat::class, 'client_id');
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(Messages::class, 'sender_id');
     }
 }
