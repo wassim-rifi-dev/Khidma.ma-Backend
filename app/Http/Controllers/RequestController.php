@@ -9,6 +9,19 @@ use App\Services\RequestServices;
 
 class RequestController extends Controller
 {
+    public function clientRequest(RequestServices $requestServices)
+    {
+        $requests = $requestServices->getClientRequests((int) request()->user()->id);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'requests' => $requests,
+            ],
+            'message' => 'Client requests retrieved successfully'
+        ], 200);
+    }
+
     public function store(StoreRequestRequest $request, int $serviceId, RequestServices $requestServices)
     {
         $data = array_merge($request->validated(), [

@@ -32,6 +32,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::middleware('role:admin')->group(function() {});
 
     Route::middleware('role:client')->group(function() {
+        Route::get('client/request' , [RequestController::class , 'clientRequest']); // show client requests
         Route::post('request/store/{serviceId}' , [RequestController::class , 'store']); // create request
     });
 

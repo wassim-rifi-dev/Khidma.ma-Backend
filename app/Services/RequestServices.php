@@ -11,6 +11,13 @@ class RequestServices
         return Request::create($data);
     }
 
+    public function getClientRequests(int $clientId)
+    {
+        return Request::with('service')
+            ->where('client_id', $clientId)
+            ->get();
+    }
+
     public function getRequestById(int $id)
     {
         return Request::find($id);
