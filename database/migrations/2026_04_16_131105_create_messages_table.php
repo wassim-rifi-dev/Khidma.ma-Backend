@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('sender_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('chat_id')->constrained('chats')->onDelete('cascade');
             $table->text('message');
-            $table->enum('message_type' , ['text' , 'image' , 'video' , 'file']);
+            $table->enum('message_type' , ['text' , 'image' , 'video' , 'file' , 'request']);
             $table->string('media_url')->nullable();
             $table->timestamps();
         });

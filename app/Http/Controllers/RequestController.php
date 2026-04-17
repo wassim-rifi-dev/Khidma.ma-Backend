@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\MessageServices;
 use App\Http\Requests\Request\StoreRequestRequest;
 use App\Http\Requests\Request\UpdateRequestStatusRequest;
 use App\Services\ProfessionalServices;
@@ -45,7 +46,7 @@ class RequestController extends Controller
         ], 200);
     }
 
-    public function store(StoreRequestRequest $request, int $serviceId, RequestServices $requestServices)
+    public function store(StoreRequestRequest $request, int $serviceId, RequestServices $requestServices, MessageServices $messageServices)
     {
         $data = array_merge($request->validated(), [
             'client_id' => $request->user()->id,
@@ -53,6 +54,26 @@ class RequestController extends Controller
         ]);
 
         $newRequest = $requestServices->createRequest($data);
+        $service = $newRequest->service;
+
+        if ($service) {
+            $chat = $messageServices->getChatByParticipants($request->user()->id, $service->professional_id);
+
+            if (!$chat) {
+                $chat = $messageServices->createChat([
+                    'client_id' => $request->user()->id,
+                    'professional_id' => $service->professional_id,
+                ]);
+            }
+
+            $messageServices->createMessage([
+                'sender_id' => $request->user()->id,
+                'chat_id' => $chat->id,
+                'message' => $newRequest->message,
+                'message_type' => 'request',
+                'media_url' => null,
+            ]);
+        }
 
         return response()->json([
             'success' => true,
