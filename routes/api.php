@@ -34,6 +34,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::middleware('role:client')->group(function() {
         Route::get('client/request' , [RequestController::class , 'clientRequest']); // show client requests
+        Route::get('review/service/{serviceId}' , [ReviewsController::class , 'index']); // show service reviews
         Route::post('request/store/{serviceId}' , [RequestController::class , 'store']); // create request
         Route::post('review/store/{orderId}' , [ReviewsController::class , 'store']); // create review
     });
