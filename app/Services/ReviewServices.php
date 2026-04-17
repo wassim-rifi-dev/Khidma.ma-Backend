@@ -13,6 +13,21 @@ class ReviewServices
         return Reviews::create($data);
     }
 
+    public function getServiceReviews(int $serviceId)
+    {
+        $service = Service::find($serviceId);
+
+        if (!$service) {
+            return null;
+        }
+
+        return Reviews::with(['client', 'order'])
+            ->whereHas('order', function ($query) use ($serviceId) {
+                $query->where('service_id', $serviceId);
+            })
+            ->get();
+    }
+
     public function getServiceAverageRating(int $serviceId)
     {
         return (float) (Reviews::whereHas('order', function ($query) use ($serviceId) {

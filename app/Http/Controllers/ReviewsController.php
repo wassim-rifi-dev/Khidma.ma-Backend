@@ -8,6 +8,27 @@ use App\Services\ReviewServices;
 
 class ReviewsController extends Controller
 {
+    public function index(ReviewServices $reviewServices , int $serviceId)
+    {
+        $serviceReviews = $reviewServices->getServiceReviews($serviceId);
+
+        if (!$serviceReviews) {
+            return response()->json([
+                'success' => false,
+                'data' => [],
+                'message' => 'Service not found'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'serviceReviews' => $serviceReviews,
+            ],
+            'message' => 'Service reviews retrieved successfully'
+        ], 200);
+    }
+
     public function store(StoreReviewRequest $request, int $orderId, ReviewServices $reviewServices, RequestServices $requestServices)
     {
         $order = $requestServices->getRequestById($orderId);
