@@ -23,7 +23,6 @@ class StoreRequestRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'service_id' => 'required|integer|exists:services,id',
             'message' => 'required|string|max:255',
             'status' => 'nullable|string|in:Nouveau,En_Cour,Terminer',
         ];

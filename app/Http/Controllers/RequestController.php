@@ -7,10 +7,11 @@ use App\Services\RequestServices;
 
 class RequestController extends Controller
 {
-    public function store(StoreRequestRequest $request, RequestServices $requestServices)
+    public function store(StoreRequestRequest $request, int $serviceId, RequestServices $requestServices)
     {
         $data = array_merge($request->validated(), [
             'client_id' => $request->user()->id,
+            'service_id' => $serviceId,
         ]);
 
         $newRequest = $requestServices->createRequest($data);
