@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Request\StoreRequestRequest;
+use App\Http\Requests\Request\UpdateRequestStatusRequest;
+use App\Services\ProfessionalServices;
 use App\Services\RequestServices;
 
 class RequestController extends Controller
@@ -23,5 +25,45 @@ class RequestController extends Controller
             ],
             'message' => 'Request created successfully'
         ], 201);
+    }
+
+    public function updateStatus(UpdateRequestStatusRequest $request, int $id, RequestServices $requestServices, ProfessionalServices $professionalServices) {
+        $professional = $professionalServices->getProfessionalInfo((int) $request->user()->id);
+
+        if (!$professional) {
+            return response()->json([
+                'success' => false,
+                'data' => [],
+                'message' => 'Professional profile not found'
+            ], 404);
+        }
+
+        $clientRequest = $requestServices->getRequestById($id);
+
+        if (!$clientRequest) {
+            return response()->json([
+                'success' => false,
+                'data' => [],
+                'message' => 'Request not found'
+            ], 404);
+        }
+
+        if (!$clientRequest->service || $clientRequest->service->professional_id !== $professional->id) {
+            return response()->json([
+                'success' => false,
+                'data' => [],
+                'message' => 'Unauthorized'
+            ], 403);
+        }
+
+        $updatedRequest = $requestServices->updateRequestStatus($clientRequest, $request->validated()['status']);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'request' => $updatedRequest,
+            ],
+            'message' => 'Request status updated successfully'
+        ], 200);
     }
 }
