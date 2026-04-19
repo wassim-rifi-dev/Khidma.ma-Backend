@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\MessagesController;
 use App\Http\Controllers\Professional\ProfessionalProfile;
@@ -18,6 +19,9 @@ Route::get('/test', function () {
         'success' => true,
     ]);
 });
+
+// Categories
+Route::get('categories' , [CategoryController::class , 'index']);
 
 // Authentication
 Route::post('register' , [RegisterController::class , 'register']); // Register
