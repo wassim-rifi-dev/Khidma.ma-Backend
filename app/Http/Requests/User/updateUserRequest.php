@@ -25,7 +25,9 @@ class updateUserRequest extends FormRequest
         $userId = $this->user()->id;
 
         return [
-            'name'  => 'sometimes|string|max:255',
+            'first_name' => 'sometimes|string|max:255',
+            'last_name' => 'sometimes|string|max:255',
+            'username' => 'sometimes|string|max:255|unique:users,username,' . $userId,
             'email' => 'sometimes|email|unique:users,email,' . $userId,
             'phone' => 'sometimes|string|unique:users,phone,' . $userId,
             'photo' => 'sometimes|image|mimes:jpeg,png,jpg,webp|max:2048',

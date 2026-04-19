@@ -13,7 +13,9 @@ class User extends Authenticatable
     use HasFactory, HasApiTokens, Notifiable;
 
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
+        'username',
         'email',
         'phone',
         'role',
@@ -21,6 +23,15 @@ class User extends Authenticatable
         'password',
         'photo'
     ];
+
+    protected $appends = [
+        'name',
+    ];
+
+    public function getNameAttribute(): string
+    {
+        return trim($this->first_name . ' ' . $this->last_name);
+    }
 
     public function professional()
     {

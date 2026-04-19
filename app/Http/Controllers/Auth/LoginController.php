@@ -52,7 +52,7 @@ class LoginController extends Controller
                     "professional" => $professional,
                     "token" => $token
                 ],
-                "message" => "Bonjour $user->name, votre compt professionnal creer en succe"
+                "message" => "Bonjour $user->first_name, votre compt professionnal creer en succe"
             ], 201);
         }
 
@@ -62,7 +62,7 @@ class LoginController extends Controller
                 "user" => $user,
                 "token" => $token
             ],
-            "message" => "Bonjour $user->name, votre compt creer en succe"
+            "message" => "Bonjour $user->first_name, votre compt creer en succe"
         ], 201);
     }
 }

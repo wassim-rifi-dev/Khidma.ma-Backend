@@ -25,7 +25,9 @@ class RegisterController extends Controller
         }
 
         $data = [
-            'name' => $registerRequest->name,
+            'first_name' => $registerRequest->first_name,
+            'last_name' => $registerRequest->last_name,
+            'username' => $registerRequest->username,
             'email' => $registerRequest->email,
             'phone' => $registerRequest->phone,
             'role' => $registerRequest->role,
@@ -64,7 +66,7 @@ class RegisterController extends Controller
                     "professional" => $professional,
                     "token" => $token
                 ],
-                "message" => "Bonjour $user->name, votre compt professionnal creer en succe"
+                "message" => "Bonjour $user->first_name, votre compt professionnal creer en succe"
             ], 201);
         }
 
@@ -74,7 +76,7 @@ class RegisterController extends Controller
                 "user" => $user,
                 "token" => $token
             ],
-            "message" => "Bonjour $user->name, votre compt creer en succe"
+            "message" => "Bonjour $user->first_name, votre compt creer en succe"
         ], 201);
     }
 }
