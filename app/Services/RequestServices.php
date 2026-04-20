@@ -18,6 +18,15 @@ class RequestServices
             ->get();
     }
 
+    public function getLastThreeClientRequests(int $clientId)
+    {
+        return Request::with('service')
+            ->where('client_id', $clientId)
+            ->latest()
+            ->limit(3)
+            ->get();
+    }
+
     public function getProfessionalRequests(int $professionalId)
     {
         return Request::with(['client', 'service'])

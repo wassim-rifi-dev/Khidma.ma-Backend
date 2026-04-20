@@ -23,6 +23,18 @@ class RequestController extends Controller
         ], 200);
     }
 
+    public function lastThreeClientRequest(RequestServices $requestServices) {
+        $requests = $requestServices->getLastThreeClientRequests((int) request()->user()->id);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'requests' => $requests,
+            ],
+            'message' => 'Client requests retrieved successfully'
+        ], 200);
+    }
+
     public function professionalRequest(RequestServices $requestServices, ProfessionalServices $professionalServices)
     {
         $professional = $professionalServices->getProfessionalInfo((int) request()->user()->id);
