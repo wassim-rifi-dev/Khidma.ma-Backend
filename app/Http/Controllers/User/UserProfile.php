@@ -38,7 +38,7 @@ class UserProfile extends Controller
                 Storage::disk('public')->delete($user->photo);
             }
 
-            $path = $updateUserRequest->file('photo')->store('users/photos', 'public');
+            $path = $updateUserRequest->file('photo')->store('users/profile', 'public');
             $data['photo'] = $path;
         }
 
