@@ -15,6 +15,7 @@ class RequestServices
     {
         return Request::with('service')
             ->where('client_id', $clientId)
+            ->where('is_Cancled', false)
             ->get();
     }
 
@@ -22,6 +23,7 @@ class RequestServices
     {
         return Request::with('service')
             ->where('client_id', $clientId)
+            ->where('is_Cancled', false)
             ->latest()
             ->limit(3)
             ->get();
