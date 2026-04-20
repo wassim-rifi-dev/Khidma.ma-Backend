@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Service\StoreServiceRequest;
 use App\Http\Requests\Service\UpdateServiceRequest;
+use App\Mail\ServiceCreactionMail;
 use App\Services\ProfessionalServices;
 use App\Services\ServiceServices;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ServiceController extends Controller
 {
@@ -48,7 +50,9 @@ class ServiceController extends Controller
     }
 
     public function store(StoreServiceRequest $request, ServiceServices $serviceServices, ProfessionalServices $professionalServices) {
-        $professional = $professionalServices->getProfessionalInfo((int) $request->user()->id);
+        $user = $request->user();
+
+        $professional = $professionalServices->getProfessionalInfo((int) $user->id);
 
         if (!$professional) {
             return response()->json([
@@ -64,6 +68,7 @@ class ServiceController extends Controller
         ]);
 
         $service = $serviceServices->createServices($data);
+        Mail::to($user->email)->send(new ServiceCreactionMail($service));
 
         return response()->json([
             'success' => true,

@@ -14,14 +14,12 @@
 
                 <table width="600" style="background:#ffffff; margin-top:40px; border-radius:10px; overflow:hidden;">
 
-                    <!-- Header -->
                     <tr>
                         <td style="background:#4CAF50; color:#fff; padding:20px; text-align:center;">
                             <h1>Bienvenue 👋</h1>
                         </td>
                     </tr>
 
-                    <!-- Content -->
                     <tr>
                         <td style="padding:30px; text-align:center;">
                             <h2>Bonjour {{ $user->name }} 🎉</h2>
@@ -37,7 +35,6 @@
                         </td>
                     </tr>
 
-                    <!-- Footer -->
                     <tr>
                         <td style="background:#f1f1f1; padding:15px; text-align:center; font-size:12px; color:#888;">
                             © {{ date('Y') }} {{ config('app.name') }} - Tous droits réservés
