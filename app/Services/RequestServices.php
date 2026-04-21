@@ -13,7 +13,7 @@ class RequestServices
 
     public function getClientRequests(int $clientId)
     {
-        return Request::with('service')
+        return Request::with('service.professional.user')
             ->where('client_id', $clientId)
             ->where('is_Cancled', false)
             ->get();
@@ -21,7 +21,7 @@ class RequestServices
 
     public function getLastThreeClientRequests(int $clientId)
     {
-        return Request::with('service')
+        return Request::with('service.professional.user')
             ->where('client_id', $clientId)
             ->where('is_Cancled', false)
             ->latest()
