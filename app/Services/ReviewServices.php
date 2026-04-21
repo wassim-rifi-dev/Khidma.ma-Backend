@@ -55,6 +55,11 @@ class ReviewServices
         })->count();
     }
 
+    public function getClientReviewsCount(int $clientId)
+    {
+        return Reviews::where('client_id', $clientId)->count();
+    }
+
     public function updateProfessionalRating(int $professionalId)
     {
         $professional = professional::find($professionalId);

@@ -29,6 +29,19 @@ class ReviewsController extends Controller
         ], 200);
     }
 
+    public function clientReviewsCount(ReviewServices $reviewServices)
+    {
+        $count = $reviewServices->getClientReviewsCount((int) request()->user()->id);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'count' => $count,
+            ],
+            'message' => 'Client reviews count retrieved successfully'
+        ], 200);
+    }
+
     public function store(StoreReviewRequest $request, int $orderId, ReviewServices $reviewServices, RequestServices $requestServices)
     {
         $order = $requestServices->getRequestById($orderId);
