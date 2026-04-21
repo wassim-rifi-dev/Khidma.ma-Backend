@@ -25,6 +25,14 @@ class RequestServices
             ->count();
     }
 
+    public function getCompletedClientRequestsCount(int $clientId)
+    {
+        return Request::where('client_id', $clientId)
+            ->where('status', 'Terminer')
+            ->where('is_Cancled', false)
+            ->count();
+    }
+
     public function getLastThreeClientRequests(int $clientId)
     {
         return Request::with('service.professional.user')
