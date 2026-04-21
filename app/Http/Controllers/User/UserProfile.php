@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\User\updateUserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class UserProfile extends Controller
 {
@@ -45,7 +46,10 @@ class UserProfile extends Controller
                 Storage::disk('public')->delete($user->photo);
             }
 
-            $path = $updateUserRequest->file('photo')->store('users/profile', 'public');
+            $photo = $updateUserRequest->file('photo');
+            $fullNameSlug = Str::slug(trim($user->first_name . ' ' . $user->last_name));
+            $fileName = strtolower($fullNameSlug ?: 'user-profile') . '-' . time() . '.' . $photo->getClientOriginalExtension();
+            $path = $photo->storeAs('users/profile', $fileName, 'public');
             $data['photo'] = $path;
         }
 
