@@ -19,6 +19,12 @@ class RequestServices
             ->get();
     }
 
+    public function getClientRequestsCount(int $clientId) {
+        return Request::with('service.professional.user')
+            ->where('client_id', $clientId)
+            ->count();
+    }
+
     public function getLastThreeClientRequests(int $clientId)
     {
         return Request::with('service.professional.user')

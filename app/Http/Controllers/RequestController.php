@@ -23,6 +23,19 @@ class RequestController extends Controller
         ], 200);
     }
 
+    public function clientRequestsCount(RequestServices $requestServices)
+    {
+        $count = $requestServices->getClientRequestsCount((int) request()->user()->id);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'count' => $count,
+            ],
+            'message' => 'Client requests count retrieved successfully'
+        ], 200);
+    }
+
     public function lastThreeClientRequest(RequestServices $requestServices) {
         $requests = $requestServices->getLastThreeClientRequests((int) request()->user()->id);
 

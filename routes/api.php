@@ -47,6 +47,7 @@ Route::middleware('auth:sanctum')->group(function() {
     // Client
     Route::middleware('role:client')->group(function() {
         Route::get('client/request' , [RequestController::class , 'clientRequest']); // show client requests
+        Route::get('client/request/count' , [RequestController::class , 'clientRequestsCount']); // get client requests count
         Route::get('client/request/latest' , [RequestController::class , 'lastThreeClientRequest']); // get Last three client request
         Route::get('review/service/{serviceId}' , [ReviewsController::class , 'index']); // show service reviews
         Route::post('request/store/{serviceId}' , [RequestController::class , 'store']); // create request
