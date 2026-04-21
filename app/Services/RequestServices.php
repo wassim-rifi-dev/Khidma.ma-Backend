@@ -43,6 +43,16 @@ class RequestServices
             ->get();
     }
 
+    public function getLastSixClientRequests(int $clientId)
+    {
+        return Request::with('service.professional.user')
+            ->where('client_id', $clientId)
+            ->where('is_Cancled', false)
+            ->latest()
+            ->limit(6)
+            ->get();
+    }
+
     public function getProfessionalRequests(int $professionalId)
     {
         return Request::with(['client', 'service'])

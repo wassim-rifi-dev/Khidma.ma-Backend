@@ -61,6 +61,19 @@ class RequestController extends Controller
         ], 200);
     }
 
+    public function lastSixClientRequest(RequestServices $requestServices)
+    {
+        $requests = $requestServices->getLastSixClientRequests((int) request()->user()->id);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'requests' => $requests,
+            ],
+            'message' => 'Client requests retrieved successfully'
+        ], 200);
+    }
+
     public function professionalRequest(RequestServices $requestServices, ProfessionalServices $professionalServices)
     {
         $professional = $professionalServices->getProfessionalInfo((int) request()->user()->id);
