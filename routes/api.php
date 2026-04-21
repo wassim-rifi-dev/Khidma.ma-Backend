@@ -34,6 +34,7 @@ Route::middleware('auth:sanctum')->group(function() {
     // Shared authenticated routes
     Route::get('user/profile' , [UserProfile::class , 'show']); // show user profile
     Route::put('user/profile/update' , [UserProfile::class , 'update']); // update user profile
+    Route::post('user/profile/update' , [UserProfile::class , 'update']); // update user profile with multipart form-data
 
     Route::get('services' , [ServiceController::class , 'index']); // showw all service
 

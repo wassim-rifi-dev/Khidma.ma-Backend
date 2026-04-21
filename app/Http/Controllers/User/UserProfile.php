@@ -33,6 +33,13 @@ class UserProfile extends Controller
         $user = $updateUserRequest->user();
         $data = $updateUserRequest->validated();
 
+        $removePhoto = filter_var($updateUserRequest->input('remove_photo', false), FILTER_VALIDATE_BOOLEAN);
+
+        if ($removePhoto && $user->photo && Storage::disk('public')->exists($user->photo)) {
+            Storage::disk('public')->delete($user->photo);
+            $data['photo'] = null;
+        }
+
         if ($updateUserRequest->hasFile('photo')) {
             if ($user->photo && Storage::disk('public')->exists($user->photo)) {
                 Storage::disk('public')->delete($user->photo);
@@ -41,6 +48,8 @@ class UserProfile extends Controller
             $path = $updateUserRequest->file('photo')->store('users/profile', 'public');
             $data['photo'] = $path;
         }
+
+        unset($data['remove_photo']);
 
         $user->update($data);
 

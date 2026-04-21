@@ -30,6 +30,7 @@ class updateUserRequest extends FormRequest
             'username' => 'sometimes|string|max:255|unique:users,username,' . $userId,
             'email' => 'sometimes|email|unique:users,email,' . $userId,
             'phone' => 'sometimes|string|unique:users,phone,' . $userId,
+            'remove_photo' => 'sometimes|boolean',
             'photo' => 'sometimes|image|mimes:jpeg,png,jpg,webp|max:2048',
         ];
     }
