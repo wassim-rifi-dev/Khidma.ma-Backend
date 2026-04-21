@@ -51,4 +51,9 @@ class Service extends Model
     public function reviews() {
         return $this->hasManyThrough(Reviews::class, Request::class, 'service_id', 'order_id', 'id', 'id');
     }
+
+    public function images()
+    {
+        return $this->hasMany(Service_Images::class, 'service_id');
+    }
 }
