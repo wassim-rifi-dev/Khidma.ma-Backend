@@ -11,7 +11,7 @@ class ServiceServices {
     }
 
     public function getAllServices(int $perPage = 10) {
-        return Service::paginate($perPage);
+        return Service::with(['category', 'professional.user'])->paginate($perPage);
     }
 
     public function getServiceById(int $id) {

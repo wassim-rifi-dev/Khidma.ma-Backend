@@ -24,7 +24,7 @@ class ServiceController extends Controller
                 'services' => $services,
             ],
             'message' => `C'est sa les services`
-        ], 201);
+        ], 200);
     }
 
     public function trashed(ServiceServices $serviceServices, ProfessionalServices $professionalServices) {
