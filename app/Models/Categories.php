@@ -10,6 +10,11 @@ class Categories extends Model
         'name'
     ];
 
+    public function professionals()
+    {
+        return $this->hasMany(professional::class, 'categorie_id');
+    }
+
     public function services()
     {
         return $this->hasMany(Service::class, 'categorie_id');

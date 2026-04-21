@@ -52,7 +52,8 @@ class RegisterController extends Controller
             $professionalData = [
                 'user_id' => $user->id,
                 'categorie_id' => $category->id,
-                'city' => $registerRequest->city
+                'city' => $registerRequest->city,
+                'description' => $registerRequest->description,
             ];
 
             $professional = $professionalServices->create($professionalData);

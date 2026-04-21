@@ -10,8 +10,18 @@ class Request extends Model
         'client_id',
         'service_id',
         'message',
+        'price',
+        'is_Cancled',
         'status',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'price' => 'float',
+            'is_Cancled' => 'boolean',
+        ];
+    }
 
     public function client() {
         return $this->belongsTo(User::class, 'client_id');

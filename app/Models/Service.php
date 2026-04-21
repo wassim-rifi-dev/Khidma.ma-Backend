@@ -20,9 +20,18 @@ class Service extends Model
         'rating',
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'price_min' => 'float',
+            'price_max' => 'float',
+            'rating' => 'float',
+        ];
+    }
+
     public function professional()
     {
-        return $this->belongsTo(Professional::class, 'professional_id');
+        return $this->belongsTo(professional::class, 'professional_id');
     }
 
     public function categorie()
@@ -30,11 +39,16 @@ class Service extends Model
         return $this->belongsTo(Categories::class, 'categorie_id');
     }
 
+    public function category()
+    {
+        return $this->categorie();
+    }
+
     public function requests() {
         return $this->hasMany(Request::class, 'service_id');
     }
 
     public function reviews() {
-        return $this->hasMany(Reviews::class , 'order_id');
+        return $this->hasManyThrough(Reviews::class, Request::class, 'service_id', 'order_id', 'id', 'id');
     }
 }

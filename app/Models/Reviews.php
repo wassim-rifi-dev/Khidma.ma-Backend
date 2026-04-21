@@ -13,6 +13,13 @@ class Reviews extends Model
         'comment',
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'rating' => 'float',
+        ];
+    }
+
     public function order() {
         return $this->belongsTo(Request::class, 'order_id');
     }

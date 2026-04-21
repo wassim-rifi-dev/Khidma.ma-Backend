@@ -28,6 +28,17 @@ class User extends Authenticatable
         'name',
     ];
 
+    protected $hidden = [
+        'password',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'is_active' => 'boolean',
+        ];
+    }
+
     public function getNameAttribute(): string
     {
         return trim($this->first_name . ' ' . $this->last_name);

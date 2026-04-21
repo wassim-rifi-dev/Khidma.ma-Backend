@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('client_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('service_id')->constrained('services')->onDelete('cascade');
             $table->string('message');
+            $table->float('price');
             $table->boolean('is_Cancled')->default(false);
             $table->enum('status' , ['Nouveau' , 'En_Cour' , 'Terminer'])->default('Nouveau');
             $table->timestamps();
