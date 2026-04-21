@@ -30,4 +30,13 @@ class ProfessionalServices {
             ->where('professional_id', $professionalId)
             ->get();
     }
+
+    public function getTopProfessionals(int $limit = 2)
+    {
+        return professional::with(['user', 'category'])
+            ->withCount(['services', 'requests'])
+            ->orderByDesc('rating')
+            ->limit($limit)
+            ->get();
+    }
 }

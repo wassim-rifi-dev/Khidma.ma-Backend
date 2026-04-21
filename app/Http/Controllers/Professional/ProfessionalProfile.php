@@ -10,6 +10,18 @@ use Illuminate\Http\Request;
 
 class ProfessionalProfile extends Controller
 {
+    public function top(ProfessionalServices $professionalServices) {
+        $professionals = $professionalServices->getTopProfessionals(2);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'professionals' => $professionals
+            ],
+            'message' => 'Top professionals retrieved successfully'
+        ], 200);
+    }
+
     public function show(Request $request , ProfessionalServices $professionalServices) {
         $user = $request->user();
         $professional = $professionalServices->getProfessionalInfo((int) $user->id);
