@@ -24,7 +24,15 @@ class ProfessionalProfile extends Controller
 
     public function show(Request $request , ProfessionalServices $professionalServices) {
         $user = $request->user();
-        $professional = $professionalServices->getProfessionalInfo((int) $user->id);
+        $professional = $professionalServices->getProfessionalDashboardProfile((int) $user->id);
+
+        if (!$professional) {
+            return response()->json([
+                'success' => false,
+                'data' => [],
+                'message' => 'Professional profile not found',
+            ], 404);
+        }
 
         return response()->json([
             'success' => true,
