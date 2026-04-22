@@ -36,6 +36,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::put('user/profile/update' , [UserProfile::class , 'update']); // update user profile
     Route::post('user/profile/update' , [UserProfile::class , 'update']); // update user profile with multipart form-data
     Route::get('professionals/top' , [ProfessionalProfile::class , 'top']); // show top professionals
+    Route::get('professionals/{professionalId}' , [ProfessionalProfile::class , 'showById']); // show selected professional profile
 
     Route::get('services' , [ServiceController::class , 'index']); // showw all service
 

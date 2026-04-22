@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('categorie_id')->constrained('categories')->onDelete('cascade');
             $table->string('city');
             $table->float('rating')->default(0.00);
+            $table->boolean('is_verified')->default(false);
             $table->text('description')->nullable();
             $table->timestamps();
         });

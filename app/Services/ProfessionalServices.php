@@ -39,4 +39,17 @@ class ProfessionalServices {
             ->limit($limit)
             ->get();
     }
+
+    public function getProfessionalProfileById(int $professionalId)
+    {
+        return professional::with([
+            'user',
+            'category',
+            'services.category',
+            'services.images',
+            'services.reviews.client',
+        ])
+            ->withCount(['services', 'requests'])
+            ->find($professionalId);
+    }
 }

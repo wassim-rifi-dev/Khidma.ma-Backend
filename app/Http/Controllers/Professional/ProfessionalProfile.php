@@ -35,6 +35,25 @@ class ProfessionalProfile extends Controller
         ] , 200);
     }
 
+    public function showById(int $professionalId, ProfessionalServices $professionalServices) {
+        $professional = $professionalServices->getProfessionalProfileById($professionalId);
+
+        if (!$professional) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Professional not found',
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'professional' => $professional,
+            ],
+            'message' => 'Professional profile retrieved successfully',
+        ], 200);
+    }
+
     public function update(updateProfissionalProfile $request , ProfessionalServices $professionalServices) {
         $user = $request->user();
 
