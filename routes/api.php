@@ -39,6 +39,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('professionals/{professionalId}' , [ProfessionalProfile::class , 'showById']); // show selected professional profile
 
     Route::get('services' , [ServiceController::class , 'index']); // showw all service
+    Route::get('services/{id}' , [ServiceController::class , 'show']); // show selected service
 
     // Chat & messages
     Route::get('chat/{chatId}' , [ChatController::class , 'index']); // show chat messages

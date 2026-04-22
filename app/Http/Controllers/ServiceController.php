@@ -23,7 +23,27 @@ class ServiceController extends Controller
             'data' => [
                 'services' => $services,
             ],
-            'message' => `C'est sa les services`
+            'message' => "C'est sa les services"
+        ], 200);
+    }
+
+    public function show(int $id, ServiceServices $serviceServices) {
+        $service = $serviceServices->getServiceDetailsById($id);
+
+        if (!$service) {
+            return response()->json([
+                'success' => false,
+                'data' => [],
+                'message' => 'Service not found'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'service' => $service,
+            ],
+            'message' => 'Service retrieved successfully'
         ], 200);
     }
 

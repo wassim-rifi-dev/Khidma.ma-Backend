@@ -11,11 +11,21 @@ class ServiceServices {
     }
 
     public function getAllServices(int $perPage = 10) {
-        return Service::with(['category', 'professional.user'])->paginate($perPage);
+        return Service::with(['category', 'professional.user', 'images'])->paginate($perPage);
     }
 
     public function getServiceById(int $id) {
         return Service::find($id);
+    }
+
+    public function getServiceDetailsById(int $id) {
+        return Service::with([
+            'category',
+            'images',
+            'professional.user',
+            'professional.category',
+            'reviews.client',
+        ])->find($id);
     }
 
     public function updateService(Service $service, array $data) {
