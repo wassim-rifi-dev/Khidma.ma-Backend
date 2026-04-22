@@ -49,7 +49,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::middleware('role:admin')->group(function() {});
 
     // Client
-    Route::middleware('role:client')->group(function() {
+    Route::middleware('role:client,professional')->group(function() {
         Route::get('client/request' , [RequestController::class , 'clientRequest']); // show client requests
         Route::get('client/request/count' , [RequestController::class , 'clientRequestsCount']); // get client requests count
         Route::get('client/request/count/completed' , [RequestController::class , 'completedClientRequestsCount']); // get completed client requests count
