@@ -15,13 +15,14 @@ class RequestServices
     {
         return Request::with('service.professional.user')
             ->where('client_id', $clientId)
-            ->where('is_Cancled', false)
+            ->where('is_canceled', false)
             ->get();
     }
 
     public function getClientRequestsCount(int $clientId) {
         return Request::with('service.professional.user')
             ->where('client_id', $clientId)
+            ->where('is_canceled', false)
             ->count();
     }
 
@@ -29,7 +30,7 @@ class RequestServices
     {
         return Request::where('client_id', $clientId)
             ->where('status', 'Terminer')
-            ->where('is_Cancled', false)
+            ->where('is_canceled', false)
             ->count();
     }
 
@@ -37,7 +38,7 @@ class RequestServices
     {
         return Request::with('service.professional.user')
             ->where('client_id', $clientId)
-            ->where('is_Cancled', false)
+            ->where('is_canceled', false)
             ->latest()
             ->limit(3)
             ->get();
@@ -47,7 +48,7 @@ class RequestServices
     {
         return Request::with('service.professional.user')
             ->where('client_id', $clientId)
-            ->where('is_Cancled', false)
+            ->where('is_canceled', false)
             ->latest()
             ->limit(6)
             ->get();

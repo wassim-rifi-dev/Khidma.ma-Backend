@@ -11,15 +11,19 @@ class Request extends Model
         'service_id',
         'message',
         'price',
-        'is_Cancled',
+        'is_canceled',
         'status',
+        'address',
+        'preferred_date',
+        'preferred_time',
     ];
 
     protected function casts(): array
     {
         return [
             'price' => 'float',
-            'is_Cancled' => 'boolean',
+            'is_canceled' => 'boolean',
+            'preferred_date' => 'date',
         ];
     }
 
