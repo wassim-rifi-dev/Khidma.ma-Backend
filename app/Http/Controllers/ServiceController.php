@@ -15,13 +15,15 @@ class ServiceController extends Controller
     public function index(Request $request, ServiceServices $serviceServices) {
         $perPage = (int) $request->query('per_page', 10);
         $perPage = $perPage > 0 ? min($perPage, 50) : 10;
+        $filters = $request->only(['query', 'category', 'city', 'sort']);
 
-        $services = $serviceServices->getAllServices($perPage);
+        $services = $serviceServices->getAllServices($perPage, $filters);
 
         return response()->json([
             'success' => true,
             'data' => [
                 'services' => $services,
+                'cities' => $serviceServices->getServiceCities(),
             ],
             'message' => "C'est sa les services"
         ], 200);

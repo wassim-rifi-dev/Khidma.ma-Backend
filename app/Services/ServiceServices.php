@@ -10,8 +10,49 @@ class ServiceServices {
         return Service::create($data);
     }
 
-    public function getAllServices(int $perPage = 10) {
-        return Service::with(['category', 'professional.user', 'images'])->paginate($perPage);
+    public function getAllServices(int $perPage = 10, array $filters = []) {
+        $query = Service::with(['category', 'professional.user', 'images']);
+
+        if (!empty($filters['query'])) {
+            $search = $filters['query'];
+
+            $query->where(function ($serviceQuery) use ($search) {
+                $serviceQuery
+                    ->where('title', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%")
+                    ->orWhere('city', 'like', "%{$search}%")
+                    ->orWhereHas('category', function ($categoryQuery) use ($search) {
+                        $categoryQuery->where('name', 'like', "%{$search}%");
+                    })
+                    ->orWhereHas('professional.user', function ($userQuery) use ($search) {
+                        $userQuery
+                            ->where('first_name', 'like', "%{$search}%")
+                            ->orWhere('last_name', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        if (!empty($filters['category'])) {
+            $category = $filters['category'];
+
+            $query->whereHas('category', function ($categoryQuery) use ($category) {
+                $categoryQuery->where('name', 'like', "%{$category}%");
+            });
+        }
+
+        if (!empty($filters['city'])) {
+            $query->where('city', 'like', "%{$filters['city']}%");
+        }
+
+        match ($filters['sort'] ?? null) {
+            'Top Rated' => $query->orderByDesc('rating'),
+            'Price: Low to High' => $query->orderBy('price_min'),
+            'Price: High to Low' => $query->orderByDesc('price_min'),
+            'Newest' => $query->latest(),
+            default => $query->latest(),
+        };
+
+        return $query->paginate($perPage)->withQueryString();
     }
 
     public function getServiceById(int $id) {
@@ -26,6 +67,14 @@ class ServiceServices {
             'professional.category',
             'reviews.client',
         ])->find($id);
+    }
+
+    public function getServiceCities() {
+        return Service::query()
+            ->whereNotNull('city')
+            ->distinct()
+            ->orderBy('city')
+            ->pluck('city');
     }
 
     public function updateService(Service $service, array $data) {
