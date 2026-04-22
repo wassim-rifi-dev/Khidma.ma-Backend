@@ -68,10 +68,26 @@ class RequestServices
         return Request::find($id);
     }
 
+    public function getClientRequestById(int $id, int $clientId)
+    {
+        return Request::where('id', $id)
+            ->where('client_id', $clientId)
+            ->first();
+    }
+
     public function updateRequestStatus(Request $request, string $status)
     {
         $request->update([
             'status' => $status,
+        ]);
+
+        return $request->fresh();
+    }
+
+    public function cancelRequest(Request $request)
+    {
+        $request->update([
+            'is_canceled' => true,
         ]);
 
         return $request->fresh();

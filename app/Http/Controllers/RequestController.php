@@ -135,6 +135,45 @@ class RequestController extends Controller
         ], 201);
     }
 
+    public function cancel(int $id, RequestServices $requestServices)
+    {
+        $clientRequest = $requestServices->getClientRequestById($id, (int) request()->user()->id);
+
+        if (!$clientRequest) {
+            return response()->json([
+                'success' => false,
+                'data' => [],
+                'message' => 'Request not found'
+            ], 404);
+        }
+
+        if ($clientRequest->is_canceled) {
+            return response()->json([
+                'success' => false,
+                'data' => [],
+                'message' => 'Request is already canceled'
+            ], 409);
+        }
+
+        if ($clientRequest->status !== 'Nouveau') {
+            return response()->json([
+                'success' => false,
+                'data' => [],
+                'message' => 'Only new requests can be canceled'
+            ], 422);
+        }
+
+        $canceledRequest = $requestServices->cancelRequest($clientRequest);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'request' => $canceledRequest,
+            ],
+            'message' => 'Request canceled successfully'
+        ], 200);
+    }
+
     public function updateStatus(UpdateRequestStatusRequest $request, int $id, RequestServices $requestServices, ProfessionalServices $professionalServices) {
         $professional = $professionalServices->getProfessionalInfo((int) $request->user()->id);
 
