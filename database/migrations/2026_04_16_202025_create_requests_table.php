@@ -19,6 +19,9 @@ return new class extends Migration
             $table->float('price');
             $table->boolean('is_Cancled')->default(false);
             $table->enum('status' , ['Nouveau' , 'En_Cour' , 'Terminer'])->default('Nouveau');
+            $table->string('adress');
+            $table->date('preferred_date');
+            $table->time('preferred_time');
             $table->timestamps();
         });
     }
