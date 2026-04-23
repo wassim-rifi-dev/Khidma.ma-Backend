@@ -9,6 +9,20 @@ use App\Services\CategoryServices;
 
 class CategoryManagementController extends Controller
 {
+    public function index(CategoryServices $categoryServices)
+    {
+        $categories = $categoryServices->getAllCategory();
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'categories' => $categories,
+                'total' => $categories->count(),
+            ],
+            'message' => 'Categories retrieved successfully'
+        ], 200);
+    }
+
     public function store(StoreCategoryRequest $request, CategoryServices $categoryServices)
     {
         $category = $categoryServices->createCategory($request->validated());
