@@ -22,6 +22,22 @@ class ProfessionalServices {
             ->get();
     }
 
+    public function getProfessionalById(int $id): ?professional
+    {
+        return professional::with(['user', 'category'])
+            ->withCount(['services', 'requests'])
+            ->find($id);
+    }
+
+    public function updateProfessionalVerification(professional $professional, bool $isVerified): professional
+    {
+        $professional->update([
+            'is_verified' => $isVerified,
+        ]);
+
+        return $professional->fresh(['user', 'category']);
+    }
+
     public function getProfessionalInfo(int $user_id) {
         return professional::where('user_id' , $user_id)->first();
     }

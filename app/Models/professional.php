@@ -14,6 +14,7 @@ class professional extends Model
         'categorie_id',
         'city',
         'rating',
+        'is_verified',
         'description',
     ];
 
@@ -21,6 +22,7 @@ class professional extends Model
     {
         return [
             'rating' => 'float',
+            'is_verified' => 'boolean',
         ];
     }
 
