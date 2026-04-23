@@ -54,10 +54,13 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::get('admin/users', [UserManagementController::class, 'index']); // show all users for admin
         Route::patch('admin/users/{id}/status', [UserManagementController::class, 'updateStatus']); // update user status for admin
         Route::delete('admin/users/{id}', [UserManagementController::class, 'destroy']); // delete user for admin
+
         Route::get('admin/professionals', [ProfessionalManagementController::class, 'index']); // show all professionals for admin
         Route::patch('admin/professionals/{id}/verify', [ProfessionalManagementController::class, 'updateVerification']); // update professional verification for admin
+
         Route::get('admin/services', [ServiceManagementController::class, 'index']); // show all services for admin
         Route::delete('admin/services/{id}', [ServiceManagementController::class, 'destroy']); // delete service for admin
+        
         Route::get('admin/categories', [CategoryManagementController::class, 'index']); // show all categories for admin
         Route::post('admin/category/store', [CategoryManagementController::class, 'store']); // create category for admin
         Route::put('admin/category/update/{id}', [CategoryManagementController::class, 'update']); // update category for admin
