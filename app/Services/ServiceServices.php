@@ -109,4 +109,17 @@ class ServiceServices {
             ->latest()
             ->get();
     }
+
+    public function getProfessionalServicesSummary(int $professionalId) {
+        $services = Service::query()
+            ->where('professional_id', $professionalId)
+            ->get(['categorie_id', 'price_min', 'price_max', 'rating']);
+
+        return [
+            'published_services' => $services->count(),
+            'priced_offers' => $services->filter(fn ($service) => $service->price_min || $service->price_max)->count(),
+            'categories' => $services->pluck('categorie_id')->filter()->unique()->count(),
+            'average_rating' => round((float) $services->avg('rating'), 1),
+        ];
+    }
 }
