@@ -66,6 +66,8 @@ class ServiceServices {
             'professional.user',
             'professional.category',
             'reviews.client',
+            'requests.client',
+            'requests.review',
         ])->find($id);
     }
 
