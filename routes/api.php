@@ -73,6 +73,7 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::put('request/update-status/{id}' , [RequestController::class , 'updateStatus']); // update request status
 
         // Professional services
+        Route::get('professional/services' , [ServiceController::class , 'professionalServices']); // show authenticated professional services
         Route::get('service/trashed' , [ServiceController::class , 'trashed']); // show deleted services
         Route::post('service/store' , [ServiceController::class , 'store']); // create service
         Route::put('service/update/{id}' , [ServiceController::class , 'update']); // update service

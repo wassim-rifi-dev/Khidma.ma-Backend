@@ -102,4 +102,11 @@ class ServiceServices {
 
         return $service->fresh();
     }
+
+    public function getServicesByProfessional(int $professionalId) {
+        return Service::with(['category', 'images', 'requests'])
+            ->where('professional_id', $professionalId)
+            ->latest()
+            ->get();
+    }
 }

@@ -29,6 +29,28 @@ class ServiceController extends Controller
         ], 200);
     }
 
+    public function professionalServices(Request $request, ServiceServices $serviceServices, ProfessionalServices $professionalServices) {
+        $professional = $professionalServices->getProfessionalInfo((int) $request->user()->id);
+
+        if (!$professional) {
+            return response()->json([
+                'success' => false,
+                'data' => [],
+                'message' => 'Professional profile not found'
+            ], 404);
+        }
+
+        $services = $serviceServices->getServicesByProfessional($professional->id);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'services' => $services,
+            ],
+            'message' => 'Professional services retrieved successfully'
+        ], 200);
+    }
+
     public function show(int $id, ServiceServices $serviceServices) {
         $service = $serviceServices->getServiceDetailsById($id);
 
