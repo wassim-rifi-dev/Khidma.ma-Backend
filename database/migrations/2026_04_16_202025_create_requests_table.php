@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('message');
             $table->decimal('price', 10, 2);
             $table->boolean('is_canceled')->default(false);
+            $table->boolean('is_accepted')->nullable();
             $table->enum('status' , ['Nouveau' , 'En_Cour' , 'Terminer'])->default('Nouveau');
             $table->string('address');
             $table->date('preferred_date');
