@@ -66,10 +66,12 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::middleware('role:professional')->group(function() {
         // Professional profile
         Route::get('profissional/profile' , [ProfessionalProfile::class , 'show']); // show profissional profile
+        Route::get('professional/analytics' , [ProfessionalProfile::class , 'analytics']); // show professional analytics
         Route::put('professional/profile/update' , [ProfessionalProfile::class , 'update']); // update profissional profile
 
         // Professional requests
         Route::get('professional/request' , [RequestController::class , 'professionalRequest']); // show professional requests
+        Route::get('professional/request/{id}' , [RequestController::class , 'professionalRequestDetails']); // show professional request details
         Route::put('request/update-status/{id}' , [RequestController::class , 'updateStatus']); // update request status
 
         // Professional services

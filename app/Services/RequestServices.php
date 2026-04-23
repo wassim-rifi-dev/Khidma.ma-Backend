@@ -68,6 +68,16 @@ class RequestServices
         return Request::find($id);
     }
 
+    public function getProfessionalRequestById(int $id, int $professionalId)
+    {
+        return Request::with(['client', 'service.category'])
+            ->where('id', $id)
+            ->whereHas('service', function ($query) use ($professionalId) {
+                $query->where('professional_id', $professionalId);
+            })
+            ->first();
+    }
+
     public function getClientRequestById(int $id, int $clientId)
     {
         return Request::where('id', $id)

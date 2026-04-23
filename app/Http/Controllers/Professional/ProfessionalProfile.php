@@ -62,6 +62,26 @@ class ProfessionalProfile extends Controller
         ], 200);
     }
 
+    public function analytics(Request $request, ProfessionalServices $professionalServices) {
+        $analytics = $professionalServices->getProfessionalAnalytics((int) $request->user()->id);
+
+        if (!$analytics) {
+            return response()->json([
+                'success' => false,
+                'data' => [],
+                'message' => 'Professional profile not found',
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'analytics' => $analytics,
+            ],
+            'message' => 'Professional analytics retrieved successfully',
+        ], 200);
+    }
+
     public function update(updateProfissionalProfile $request , ProfessionalServices $professionalServices) {
         $user = $request->user();
 
