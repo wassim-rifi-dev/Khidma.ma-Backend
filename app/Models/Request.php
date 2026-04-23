@@ -12,6 +12,7 @@ class Request extends Model
         'message',
         'price',
         'is_canceled',
+        'is_accepted',
         'status',
         'address',
         'preferred_date',
