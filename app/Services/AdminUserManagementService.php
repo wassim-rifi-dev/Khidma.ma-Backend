@@ -10,6 +10,7 @@ class AdminUserManagementService
     public function getAllUsers(): Collection
     {
         return User::with('professional')
+            ->where('role' , '!=', 'admin')
             ->latest()
             ->get();
     }

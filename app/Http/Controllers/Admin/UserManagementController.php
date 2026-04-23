@@ -15,10 +15,21 @@ class UserManagementController extends Controller
         return response()->json([
             'success' => true,
             'data' => [
-                'users' => $users,
-                'total' => $users->count(),
+                'users' => $users
             ],
             'message' => 'Users retrieved successfully'
+        ], 200);
+    }
+
+    public function userCount(AdminUserManagementService $adminUserManagementService) {
+        $users = $adminUserManagementService->getAllUsers();
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'user_total' => $users->count()
+            ],
+            'message' => 'Number of user'
         ], 200);
     }
 
