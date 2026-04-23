@@ -133,7 +133,13 @@ class ServiceController extends Controller
             'categorie_id' => $professional->categorie_id,
         ]);
 
-        $service = $serviceServices->createServices($data);
+        unset($data['cover_image'], $data['gallery_images']);
+
+        $service = $serviceServices->createServices(
+            $data,
+            $request->file('cover_image'),
+            $request->file('gallery_images', [])
+        );
         Mail::to($user->email)->send(new ServiceCreactionMail($service));
 
         return response()->json([

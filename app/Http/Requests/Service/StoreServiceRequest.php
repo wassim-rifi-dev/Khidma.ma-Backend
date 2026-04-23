@@ -28,6 +28,9 @@ class StoreServiceRequest extends FormRequest
             'description' => 'nullable|string',
             'price_min' => 'nullable|numeric|min:0',
             'price_max' => 'required|numeric|gte:price_min',
+            'cover_image' => 'required|image|mimes:jpg,jpeg,png|max:10240',
+            'gallery_images' => 'nullable|array|max:4',
+            'gallery_images.*' => 'image|mimes:jpg,jpeg,png|max:10240',
         ];
     }
 }

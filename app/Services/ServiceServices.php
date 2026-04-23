@@ -2,12 +2,29 @@
 
 namespace App\Services;
 
+use App\Models\Service_Images;
 use App\Models\Service;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 
 
 class ServiceServices {
-    public function createServices(array $data) {
-        return Service::create($data);
+    public function createServices(array $data, ?UploadedFile $coverImage = null, array $galleryImages = []) {
+        return DB::transaction(function () use ($data, $coverImage, $galleryImages) {
+            $service = Service::create($data);
+
+            if ($coverImage) {
+                $this->createServiceImage($service->id, $coverImage, true);
+            }
+
+            foreach ($galleryImages as $galleryImage) {
+                if ($galleryImage instanceof UploadedFile) {
+                    $this->createServiceImage($service->id, $galleryImage, false);
+                }
+            }
+
+            return $service->load(['images', 'category']);
+        });
     }
 
     public function getAllServices(int $perPage = 10, array $filters = []) {
@@ -123,5 +140,16 @@ class ServiceServices {
             'categories' => $services->pluck('categorie_id')->filter()->unique()->count(),
             'average_rating' => round((float) $services->avg('rating'), 1),
         ];
+    }
+
+    protected function createServiceImage(int $serviceId, UploadedFile $image, bool $isPrimary): Service_Images
+    {
+        $path = $image->store('services', 'public');
+
+        return Service_Images::create([
+            'service_id' => $serviceId,
+            'image_url' => $path,
+            'is_primary' => $isPrimary,
+        ]);
     }
 }
