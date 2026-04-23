@@ -14,6 +14,14 @@ class ProfessionalServices {
         return professional::create($data);
     }
 
+    public function getAllProfessionals()
+    {
+        return professional::with(['user', 'category'])
+            ->withCount(['services', 'requests'])
+            ->latest()
+            ->get();
+    }
+
     public function getProfessionalInfo(int $user_id) {
         return professional::where('user_id' , $user_id)->first();
     }

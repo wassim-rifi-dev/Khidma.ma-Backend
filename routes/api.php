@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Admin\ProfessionalManagementController;
 use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ChatController;
@@ -51,6 +52,7 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::get('admin/users', [UserManagementController::class, 'index']); // show all users for admin
         Route::patch('admin/users/{id}/status', [UserManagementController::class, 'updateStatus']); // update user status for admin
         Route::delete('admin/users/{id}', [UserManagementController::class, 'destroy']); // delete user for admin
+        Route::get('admin/professionals', [ProfessionalManagementController::class, 'index']); // show all professionals for admin
     });
 
     // Client
