@@ -49,6 +49,7 @@ Route::middleware('auth:sanctum')->group(function() {
     // Admin
     Route::middleware('role:admin')->group(function() {
         Route::get('admin/users', [UserManagementController::class, 'index']); // show all users for admin
+        Route::patch('admin/users/{id}/status', [UserManagementController::class, 'updateStatus']); // update user status for admin
     });
 
     // Client

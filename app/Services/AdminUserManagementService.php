@@ -13,4 +13,18 @@ class AdminUserManagementService
             ->latest()
             ->get();
     }
+
+    public function getUserById(int $id): ?User
+    {
+        return User::with('professional')->find($id);
+    }
+
+    public function updateUserStatus(User $user, bool $isActive): User
+    {
+        $user->update([
+            'is_active' => $isActive,
+        ]);
+
+        return $user->fresh(['professional']);
+    }
 }
