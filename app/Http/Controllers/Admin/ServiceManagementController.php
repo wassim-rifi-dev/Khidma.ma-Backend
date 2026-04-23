@@ -20,4 +20,25 @@ class ServiceManagementController extends Controller
             'message' => 'Services retrieved successfully'
         ], 200);
     }
+
+    public function destroy(int $id, ServiceServices $serviceServices)
+    {
+        $service = $serviceServices->getServiceById($id);
+
+        if (!$service) {
+            return response()->json([
+                'success' => false,
+                'data' => [],
+                'message' => 'Service not found'
+            ], 404);
+        }
+
+        $serviceServices->deleteService($service);
+
+        return response()->json([
+            'success' => true,
+            'data' => [],
+            'message' => 'Service deleted successfully'
+        ], 200);
+    }
 }
