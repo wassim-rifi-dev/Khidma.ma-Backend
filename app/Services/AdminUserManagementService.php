@@ -27,4 +27,9 @@ class AdminUserManagementService
 
         return $user->fresh(['professional']);
     }
+
+    public function deleteUser(User $user): void
+    {
+        $user->delete();
+    }
 }

@@ -50,6 +50,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::middleware('role:admin')->group(function() {
         Route::get('admin/users', [UserManagementController::class, 'index']); // show all users for admin
         Route::patch('admin/users/{id}/status', [UserManagementController::class, 'updateStatus']); // update user status for admin
+        Route::delete('admin/users/{id}', [UserManagementController::class, 'destroy']); // delete user for admin
     });
 
     // Client
