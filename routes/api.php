@@ -52,6 +52,7 @@ Route::middleware('auth:sanctum')->group(function() {
     // Admin
     Route::middleware('role:admin')->group(function() {
         Route::get('admin/users', [UserManagementController::class, 'index']); // show all users for admin
+        Route::get('admin/users/count', [UserManagementController::class, 'userCount']); // show user number
         Route::patch('admin/users/{id}/status', [UserManagementController::class, 'updateStatus']); // update user status for admin
         Route::delete('admin/users/{id}', [UserManagementController::class, 'destroy']); // delete user for admin
 
@@ -60,7 +61,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
         Route::get('admin/services', [ServiceManagementController::class, 'index']); // show all services for admin
         Route::delete('admin/services/{id}', [ServiceManagementController::class, 'destroy']); // delete service for admin
-        
+
         Route::get('admin/categories', [CategoryManagementController::class, 'index']); // show all categories for admin
         Route::post('admin/category/store', [CategoryManagementController::class, 'store']); // create category for admin
         Route::put('admin/category/update/{id}', [CategoryManagementController::class, 'update']); // update category for admin
