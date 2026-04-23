@@ -25,4 +25,9 @@ class CategoryServices {
 
         return $category->fresh();
     }
+
+    public function deleteCategory(Categories $category): void
+    {
+        $category->delete();
+    }
 }

@@ -58,4 +58,25 @@ class CategoryManagementController extends Controller
             'message' => 'Category updated successfully'
         ], 200);
     }
+
+    public function destroy(int $id, CategoryServices $categoryServices)
+    {
+        $category = $categoryServices->getCategoryById($id);
+
+        if (!$category) {
+            return response()->json([
+                'success' => false,
+                'data' => [],
+                'message' => 'Category not found'
+            ], 404);
+        }
+
+        $categoryServices->deleteCategory($category);
+
+        return response()->json([
+            'success' => true,
+            'data' => [],
+            'message' => 'Category deleted successfully'
+        ], 200);
+    }
 }

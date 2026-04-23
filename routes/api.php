@@ -57,6 +57,7 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::get('admin/categories', [CategoryManagementController::class, 'index']); // show all categories for admin
         Route::post('admin/category/store', [CategoryManagementController::class, 'store']); // create category for admin
         Route::put('admin/category/update/{id}', [CategoryManagementController::class, 'update']); // update category for admin
+        Route::delete('admin/category/delete/{id}', [CategoryManagementController::class, 'destroy']); // delete category for admin
     });
 
     // Client
