@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Admin\CategoryManagementController;
 use App\Http\Controllers\Admin\ProfessionalManagementController;
+use App\Http\Controllers\Admin\ServiceManagementController;
 use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ChatController;
@@ -54,6 +55,7 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::patch('admin/users/{id}/status', [UserManagementController::class, 'updateStatus']); // update user status for admin
         Route::delete('admin/users/{id}', [UserManagementController::class, 'destroy']); // delete user for admin
         Route::get('admin/professionals', [ProfessionalManagementController::class, 'index']); // show all professionals for admin
+        Route::get('admin/services', [ServiceManagementController::class, 'index']); // show all services for admin
         Route::get('admin/categories', [CategoryManagementController::class, 'index']); // show all categories for admin
         Route::post('admin/category/store', [CategoryManagementController::class, 'store']); // create category for admin
         Route::put('admin/category/update/{id}', [CategoryManagementController::class, 'update']); // update category for admin
