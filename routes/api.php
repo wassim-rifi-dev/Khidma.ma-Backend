@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\MessagesController;
@@ -46,7 +47,9 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('message/store/{chatId}' , [MessagesController::class , 'store']); // create message
 
     // Admin
-    Route::middleware('role:admin')->group(function() {});
+    Route::middleware('role:admin')->group(function() {
+        Route::get('admin/users', [UserManagementController::class, 'index']); // show all users for admin
+    });
 
     // Client
     Route::middleware('role:client,professional')->group(function() {
