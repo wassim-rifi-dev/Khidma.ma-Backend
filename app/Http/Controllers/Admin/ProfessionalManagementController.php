@@ -22,6 +22,17 @@ class ProfessionalManagementController extends Controller
         ], 200);
     }
 
+    public function verifiedCount(ProfessionalServices $professionalServices)
+    {
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'active_professionals' => $professionalServices->getVerifiedProfessionalsCount(),
+            ],
+            'message' => 'Number of active professionals'
+        ], 200);
+    }
+
     public function updateVerification(int $id, UpdateProfessionalVerifyRequest $request, ProfessionalServices $professionalServices)
     {
         $professional = $professionalServices->getProfessionalById($id);

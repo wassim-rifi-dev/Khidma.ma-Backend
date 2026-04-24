@@ -35,6 +35,11 @@ class ServiceServices {
             ->get();
     }
 
+    public function getPublishedServicesCount(): int
+    {
+        return Service::count();
+    }
+
     public function getAllServices(int $perPage = 10, array $filters = []) {
         $query = Service::with(['category', 'professional.user', 'images']);
 

@@ -22,6 +22,11 @@ class ProfessionalServices {
             ->get();
     }
 
+    public function getVerifiedProfessionalsCount(): int
+    {
+        return professional::where('is_verified', true)->count();
+    }
+
     public function getProfessionalById(int $id): ?professional
     {
         return professional::with(['user', 'category'])

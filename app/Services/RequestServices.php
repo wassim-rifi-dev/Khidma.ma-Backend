@@ -26,6 +26,13 @@ class RequestServices
             ->count();
     }
 
+    public function getOpenRequestsCount(): int
+    {
+        return Request::whereIn('status', ['Nouveau', 'En_Cour'])
+            ->where('is_canceled', false)
+            ->count();
+    }
+
     public function getCompletedClientRequestsCount(int $clientId)
     {
         return Request::where('client_id', $clientId)

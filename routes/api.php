@@ -57,9 +57,12 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::delete('admin/users/{id}', [UserManagementController::class, 'destroy']); // delete user for admin
 
         Route::get('admin/professionals', [ProfessionalManagementController::class, 'index']); // show all professionals for admin
+        Route::get('admin/professionals/count', [ProfessionalManagementController::class, 'verifiedCount']); // show verified professionals number
         Route::patch('admin/professionals/{id}/verify', [ProfessionalManagementController::class, 'updateVerification']); // update professional verification for admin
 
         Route::get('admin/services', [ServiceManagementController::class, 'index']); // show all services for admin
+        Route::get('admin/services/count', [ServiceManagementController::class, 'publishedCount']); // show published services number
+        Route::get('admin/requests/count/open', [RequestController::class, 'adminOpenRequestsCount']); // show open requests number
         Route::delete('admin/services/{id}', [ServiceManagementController::class, 'destroy']); // delete service for admin
 
         Route::get('admin/categories', [CategoryManagementController::class, 'index']); // show all categories for admin

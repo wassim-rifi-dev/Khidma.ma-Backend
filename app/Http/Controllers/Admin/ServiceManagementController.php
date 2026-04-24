@@ -21,6 +21,17 @@ class ServiceManagementController extends Controller
         ], 200);
     }
 
+    public function publishedCount(ServiceServices $serviceServices)
+    {
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'published_services' => $serviceServices->getPublishedServicesCount(),
+            ],
+            'message' => 'Number of published services'
+        ], 200);
+    }
+
     public function destroy(int $id, ServiceServices $serviceServices)
     {
         $service = $serviceServices->getServiceById($id);

@@ -10,6 +10,17 @@ use App\Services\RequestServices;
 
 class RequestController extends Controller
 {
+    public function adminOpenRequestsCount(RequestServices $requestServices)
+    {
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'open_requests' => $requestServices->getOpenRequestsCount(),
+            ],
+            'message' => 'Open requests count retrieved successfully'
+        ], 200);
+    }
+
     public function clientRequest(RequestServices $requestServices)
     {
         $requests = $requestServices->getClientRequests((int) request()->user()->id);
