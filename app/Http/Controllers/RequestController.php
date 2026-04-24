@@ -292,19 +292,34 @@ class RequestController extends Controller
 
         $newStatus = $request->validated()['status'];
         $updatedRequest = $requestServices->updateRequestStatus($clientRequest, $newStatus);
+
+        if (!$updatedRequest) {
+            return response()->json([
+                'success' => false,
+                'data' => [],
+                'message' => sprintf(
+                    'Cannot change request status from %s to %s',
+                    $clientRequest->status,
+                    $newStatus
+                ),
+            ], 422);
+        }
+
         $updatedRequest->load('service.professional.user');
 
         $messageServices->syncRequestPayload($updatedRequest);
 
         $chat = $messageServices->getChatByParticipants((int) $updatedRequest->client_id, (int) $updatedRequest->service?->professional_id);
 
-        if ($chat && in_array($newStatus, ['En_Cour', 'Refuser'], true)) {
+        if ($chat && in_array($newStatus, ['En_Cour', 'Refuser', 'Terminer'], true)) {
             $messageServices->createMessage([
                 'sender_id' => $request->user()->id,
                 'chat_id' => $chat->id,
-                'message' => $newStatus === 'En_Cour'
-                    ? 'Request accepted. We can continue the conversation here.'
-                    : 'Request declined. Feel free to discuss details or send a new request.',
+                'message' => match ($newStatus) {
+                    'En_Cour' => 'Request accepted. We can continue the conversation here.',
+                    'Terminer' => 'Request marked as completed. The client can now leave a review.',
+                    default => 'Request declined. Feel free to discuss details or send a new request.',
+                },
                 'message_type' => 'text',
                 'media_url' => null,
             ]);

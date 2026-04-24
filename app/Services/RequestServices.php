@@ -6,6 +6,13 @@ use App\Models\Request;
 
 class RequestServices
 {
+    protected const ALLOWED_STATUS_TRANSITIONS = [
+        'Nouveau' => ['En_Cour', 'Refuser'],
+        'En_Cour' => ['Terminer'],
+        'Refuser' => [],
+        'Terminer' => [],
+    ];
+
     public function createRequest(array $data)
     {
         return Request::create($data);
@@ -103,8 +110,20 @@ class RequestServices
 
     public function updateRequestStatus(Request $request, string $status)
     {
+        $currentStatus = $request->status;
+        $allowedTransitions = self::ALLOWED_STATUS_TRANSITIONS[$currentStatus] ?? [];
+
+        if ($currentStatus === $status) {
+            return $request->fresh();
+        }
+
+        if (!in_array($status, $allowedTransitions, true)) {
+            return null;
+        }
+
         $request->update([
             'status' => $status,
+            'is_accepted' => $status === 'En_Cour' ? true : ($status === 'Refuser' ? false : $request->is_accepted),
         ]);
 
         return $request->fresh();
