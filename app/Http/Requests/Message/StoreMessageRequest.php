@@ -25,7 +25,7 @@ class StoreMessageRequest extends FormRequest
         return [
             'message' => 'required|string',
             'message_type' => 'required|string|in:text,image,video,file,request',
-            'media_url' => 'nullable|string|max:255',
+            'media_url' => 'nullable|string',
         ];
     }
 }
