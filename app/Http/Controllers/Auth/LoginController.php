@@ -35,6 +35,17 @@ class LoginController extends Controller
             );
         }
 
+        if (!$user->is_active) {
+            return response()->json(
+                [
+                    "success" => false,
+                    "data" => [],
+                    "message" => "Votre compte a ete desactive. Merci de contacter l'administrateur."
+                ],
+                403
+            );
+        }
+
         $token = $user->createToken('auth-token')->plainTextToken;
 
         $professional = null;

@@ -31,7 +31,7 @@ Route::get('categories' , [CategoryController::class , 'index']);
 Route::post('register' , [RegisterController::class , 'register']); // Register
 Route::post('login' , [LoginController::class , 'login']); // Login
 
-Route::middleware('auth:sanctum')->group(function() {
+Route::middleware(['auth:sanctum', 'active'])->group(function() {
     // Authentication
     Route::post('logout' , [LogoutController::class , 'logout']); // Logout
 

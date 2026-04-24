@@ -40,6 +40,10 @@ class AdminUserManagementService
             'is_active' => $isActive,
         ]);
 
+        if (!$isActive) {
+            $user->tokens()->delete();
+        }
+
         return $user->fresh(['professional']);
     }
 

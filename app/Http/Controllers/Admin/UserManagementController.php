@@ -78,6 +78,14 @@ class UserManagementController extends Controller
             ], 404);
         }
 
+        if ((int) request()->user()->id === (int) $user->id) {
+            return response()->json([
+                'success' => false,
+                'data' => [],
+                'message' => 'You cannot change your own account status'
+            ], 422);
+        }
+
         $updatedUser = $adminUserManagementService->updateUserStatus(
             $user,
             (bool) $request->validated()['is_active']
