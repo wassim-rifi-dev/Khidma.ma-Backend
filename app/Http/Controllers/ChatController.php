@@ -100,6 +100,48 @@ class ChatController extends Controller
         ]);
     }
 
+    public function direct(int $professionalId, Request $request, MessageServices $messageServices, ProfessionalServices $professionalServices)
+    {
+        $user = $request->user();
+        $targetProfessional = $professionalServices->getProfessionalById($professionalId);
+
+        if (!$targetProfessional) {
+            return response()->json([
+                'success' => false,
+                'data' => [],
+                'message' => 'Professional not found',
+            ], 404);
+        }
+
+        if ((int) $targetProfessional->user_id === (int) $user->id) {
+            return response()->json([
+                'success' => false,
+                'data' => [],
+                'message' => 'You cannot create a chat with yourself',
+            ], 422);
+        }
+
+        $chat = $messageServices->getChatByParticipants((int) $user->id, (int) $targetProfessional->id);
+        $created = false;
+
+        if (!$chat) {
+            $chat = $messageServices->createChat([
+                'client_id' => (int) $user->id,
+                'professional_id' => (int) $targetProfessional->id,
+            ]);
+            $created = true;
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'chat_id' => $chat->id,
+                'created' => $created,
+            ],
+            'message' => $created ? 'Chat created successfully' : 'Chat retrieved successfully',
+        ], $created ? 201 : 200);
+    }
+
     public function index(int $chatId, MessageServices $messageServices, ProfessionalServices $professionalServices) {
         $chat = $messageServices->getChatById($chatId);
 
