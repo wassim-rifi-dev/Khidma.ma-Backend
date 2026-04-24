@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class CategoriesSeeder extends Seeder
 {
@@ -13,27 +13,17 @@ class CategoriesSeeder extends Seeder
      */
     public function run(): void
     {
+        $now = now();
+
         $services = [
-            [
-                "name" => "Plumbing",
-            ],
-            [
-                "name" => "Electrical",
-            ],
-            [
-                "name" => "Painting",
-            ],
-            [
-                "name" => "Carpentry",
-            ],
-            [
-                "name" => "AC Repair",
-            ],
-            [
-                "name" => "Appliance",
-            ],
+            ['name' => 'Plumbing', 'created_at' => $now, 'updated_at' => $now],
+            ['name' => 'Electrical', 'created_at' => $now, 'updated_at' => $now],
+            ['name' => 'Painting', 'created_at' => $now, 'updated_at' => $now],
+            ['name' => 'Carpentry', 'created_at' => $now, 'updated_at' => $now],
+            ['name' => 'AC Repair', 'created_at' => $now, 'updated_at' => $now],
+            ['name' => 'Appliance', 'created_at' => $now, 'updated_at' => $now],
         ];
 
-        DB::table('categories')->insert($services);
+        DB::table('categories')->upsert($services, ['name'], ['updated_at']);
     }
 }
