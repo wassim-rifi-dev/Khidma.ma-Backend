@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Chat;
 use App\Models\Messages;
+use Illuminate\Support\Collection;
 
 class MessageServices
 {
@@ -26,7 +27,11 @@ class MessageServices
 
     public function createMessage(array $data)
     {
-        return Messages::create($data);
+        $message = Messages::create($data);
+
+        $message->chat()->touch();
+
+        return $message->load('sender');
     }
 
     public function getAllChatMessages(int $chatId)
@@ -35,5 +40,36 @@ class MessageServices
             ->where('chat_id', $chatId)
             ->oldest()
             ->get();
+    }
+
+    public function getChatsForClient(int $clientId): Collection
+    {
+        return Chat::with(['client', 'professional.user', 'latestMessage.sender'])
+            ->where('client_id', $clientId)
+            ->latest('updated_at')
+            ->get();
+    }
+
+    public function getChatsForProfessional(int $professionalId): Collection
+    {
+        return Chat::with(['client', 'professional.user', 'latestMessage.sender'])
+            ->where('professional_id', $professionalId)
+            ->latest('updated_at')
+            ->get();
+    }
+
+    public function getChatsForUser(int $userId, ?int $professionalId = null): Collection
+    {
+        $clientChats = $this->getChatsForClient($userId);
+
+        if (!$professionalId) {
+            return $clientChats;
+        }
+
+        return $clientChats
+            ->merge($this->getChatsForProfessional($professionalId))
+            ->unique('id')
+            ->sortByDesc(fn ($chat) => optional($chat->updated_at)?->timestamp ?? 0)
+            ->values();
     }
 }

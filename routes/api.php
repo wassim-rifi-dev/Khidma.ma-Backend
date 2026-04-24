@@ -46,6 +46,7 @@ Route::middleware(['auth:sanctum', 'active'])->group(function() {
     Route::get('services/{id}' , [ServiceController::class , 'show']); // show selected service
 
     // Chat & messages
+    Route::get('chats' , [ChatController::class , 'conversations']); // show user conversations
     Route::get('chat/{chatId}' , [ChatController::class , 'index']); // show chat messages
     Route::post('message/store/{chatId}' , [MessagesController::class , 'store']); // create message
 

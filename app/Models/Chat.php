@@ -25,4 +25,9 @@ class Chat extends Model
     {
         return $this->hasMany(Messages::class, 'chat_id');
     }
+
+    public function latestMessage()
+    {
+        return $this->hasOne(Messages::class, 'chat_id')->latestOfMany();
+    }
 }
