@@ -33,6 +33,15 @@ class RequestServices
             ->count();
     }
 
+    public function getLatestRequestsForAdmin(int $limit = 4)
+    {
+        return Request::with(['service'])
+            ->where('is_canceled', false)
+            ->latest()
+            ->limit($limit)
+            ->get();
+    }
+
     public function getCompletedClientRequestsCount(int $clientId)
     {
         return Request::where('client_id', $clientId)

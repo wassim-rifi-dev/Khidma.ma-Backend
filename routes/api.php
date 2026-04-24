@@ -63,6 +63,7 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::get('admin/services', [ServiceManagementController::class, 'index']); // show all services for admin
         Route::get('admin/services/count', [ServiceManagementController::class, 'publishedCount']); // show published services number
         Route::get('admin/requests/count/open', [RequestController::class, 'adminOpenRequestsCount']); // show open requests number
+        Route::get('admin/requests/latest', [RequestController::class, 'adminLatestRequests']); // show latest requests for admin
         Route::delete('admin/services/{id}', [ServiceManagementController::class, 'destroy']); // delete service for admin
 
         Route::get('admin/categories', [CategoryManagementController::class, 'index']); // show all categories for admin

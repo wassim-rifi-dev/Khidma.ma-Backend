@@ -21,6 +21,17 @@ class RequestController extends Controller
         ], 200);
     }
 
+    public function adminLatestRequests(RequestServices $requestServices)
+    {
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'requests' => $requestServices->getLatestRequestsForAdmin(),
+            ],
+            'message' => 'Latest admin requests retrieved successfully'
+        ], 200);
+    }
+
     public function clientRequest(RequestServices $requestServices)
     {
         $requests = $requestServices->getClientRequests((int) request()->user()->id);
