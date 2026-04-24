@@ -33,6 +33,39 @@ class UserManagementController extends Controller
         ], 200);
     }
 
+    public function totalUsersCount(AdminUserManagementService $adminUserManagementService)
+    {
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'total_users' => $adminUserManagementService->getTotalUsersCount(),
+            ],
+            'message' => 'Total users count retrieved successfully'
+        ], 200);
+    }
+
+    public function activeUsersCount(AdminUserManagementService $adminUserManagementService)
+    {
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'active_accounts' => $adminUserManagementService->getActiveUsersCount(),
+            ],
+            'message' => 'Active users count retrieved successfully'
+        ], 200);
+    }
+
+    public function adminsCount(AdminUserManagementService $adminUserManagementService)
+    {
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'admins' => $adminUserManagementService->getAdminsCount(),
+            ],
+            'message' => 'Admins count retrieved successfully'
+        ], 200);
+    }
+
     public function updateStatus(int $id, UpdateUserStatusRequest $request, AdminUserManagementService $adminUserManagementService)
     {
         $user = $adminUserManagementService->getUserById($id);

@@ -20,6 +20,21 @@ class AdminUserManagementService
         return User::with('professional')->find($id);
     }
 
+    public function getTotalUsersCount(): int
+    {
+        return User::count();
+    }
+
+    public function getActiveUsersCount(): int
+    {
+        return User::where('is_active', true)->count();
+    }
+
+    public function getAdminsCount(): int
+    {
+        return User::where('role', 'admin')->count();
+    }
+
     public function updateUserStatus(User $user, bool $isActive): User
     {
         $user->update([

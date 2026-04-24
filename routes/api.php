@@ -53,6 +53,9 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::middleware('role:admin')->group(function() {
         Route::get('admin/users', [UserManagementController::class, 'index']); // show all users for admin
         Route::get('admin/users/count', [UserManagementController::class, 'userCount']); // show user number
+        Route::get('admin/users/count/total', [UserManagementController::class, 'totalUsersCount']); // show total users number
+        Route::get('admin/users/count/active', [UserManagementController::class, 'activeUsersCount']); // show active users number
+        Route::get('admin/users/count/admins', [UserManagementController::class, 'adminsCount']); // show admins number
         Route::patch('admin/users/{id}/status', [UserManagementController::class, 'updateStatus']); // update user status for admin
         Route::delete('admin/users/{id}', [UserManagementController::class, 'destroy']); // delete user for admin
 
