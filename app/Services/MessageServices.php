@@ -9,20 +9,6 @@ use Illuminate\Support\Collection;
 
 class MessageServices
 {
-    public function getAccessibleChatIds(int $userId, ?int $professionalId = null): Collection
-    {
-        $clientChatIds = Chat::where('client_id', $userId)->pluck('id');
-
-        if (!$professionalId) {
-            return $clientChatIds->values();
-        }
-
-        return $clientChatIds
-            ->merge(Chat::where('professional_id', $professionalId)->pluck('id'))
-            ->unique()
-            ->values();
-    }
-
     public function getChatById(int $id)
     {
         return Chat::find($id);
@@ -86,21 +72,6 @@ class MessageServices
             ->unique('id')
             ->sortByDesc(fn ($chat) => optional($chat->updated_at)?->timestamp ?? 0)
             ->values();
-    }
-
-    public function getMessagesForUserSince(int $userId, ?int $professionalId = null, int $afterId = 0): Collection
-    {
-        $chatIds = $this->getAccessibleChatIds($userId, $professionalId);
-
-        if ($chatIds->isEmpty()) {
-            return collect();
-        }
-
-        return Messages::with('sender')
-            ->whereIn('chat_id', $chatIds)
-            ->where('id', '>', $afterId)
-            ->oldest('id')
-            ->get();
     }
 
     public function syncRequestPayload(ServiceRequest $request): void

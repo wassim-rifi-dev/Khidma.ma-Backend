@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Services\MessageServices;
 use App\Services\ProfessionalServices;
+use Illuminate\Http\Request;
 
 class ChatController extends Controller
 {
@@ -52,52 +52,6 @@ class ChatController extends Controller
             ],
             'message' => 'Chat conversations retrieved successfully'
         ], 200);
-    }
-
-    public function stream(Request $request, MessageServices $messageServices, ProfessionalServices $professionalServices)
-    {
-        $user = $request->user();
-        $professional = $professionalServices->getProfessionalInfo((int) $user->id);
-        $cursor = max((int) $request->query('cursor', 0), 0);
-
-        return response()->stream(function () use ($messageServices, $user, $professional, $cursor) {
-            $lastCursor = $cursor;
-            $startedAt = time();
-
-            while (!connection_aborted() && (time() - $startedAt) < 30) {
-                $messages = $messageServices->getMessagesForUserSince((int) $user->id, $professional?->id, $lastCursor);
-
-                foreach ($messages as $message) {
-                    $lastCursor = max($lastCursor, (int) $message->id);
-
-                    echo "event: message.created\n";
-                    echo 'data: ' . json_encode([
-                        'cursor' => $lastCursor,
-                        'message' => $message,
-                    ]) . "\n\n";
-
-                    @ob_flush();
-                    flush();
-                }
-
-                if ((time() - $startedAt) % 10 === 0) {
-                    echo "event: ping\n";
-                    echo 'data: ' . json_encode([
-                        'cursor' => $lastCursor,
-                    ]) . "\n\n";
-
-                    @ob_flush();
-                    flush();
-                }
-
-                sleep(2);
-            }
-        }, 200, [
-            'Cache-Control' => 'no-cache, no-store, must-revalidate',
-            'Connection' => 'keep-alive',
-            'Content-Type' => 'text/event-stream',
-            'X-Accel-Buffering' => 'no',
-        ]);
     }
 
     public function direct(int $professionalId, Request $request, MessageServices $messageServices, ProfessionalServices $professionalServices)
