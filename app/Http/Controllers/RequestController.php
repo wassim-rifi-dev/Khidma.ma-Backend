@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Mail\RequestCreatedProfessionalMail;
 use App\Services\MessageServices;
 use App\Http\Requests\Request\StoreRequestRequest;
 use App\Http\Requests\Request\UpdateRequestStatusRequest;
 use App\Services\ProfessionalServices;
 use App\Services\RequestServices;
+use Illuminate\Support\Facades\Mail;
 
 class RequestController extends Controller
 {
@@ -159,7 +161,7 @@ class RequestController extends Controller
         ]);
 
         $newRequest = $requestServices->createRequest($data);
-        $newRequest->load('service.professional.user');
+        $newRequest->load('service.professional.user', 'client');
         $service = $newRequest->service;
         $chat = null;
 
@@ -180,6 +182,12 @@ class RequestController extends Controller
                 'message_type' => 'request',
                 'media_url' => json_encode($this->buildRequestChatPayload($newRequest)),
             ]);
+
+            $professionalEmail = $service->professional?->user?->email;
+
+            if ($professionalEmail) {
+                Mail::to($professionalEmail)->send(new RequestCreatedProfessionalMail($newRequest));
+            }
         }
 
         return response()->json([
