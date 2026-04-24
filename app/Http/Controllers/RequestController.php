@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Services\MessageServices;
 use App\Http\Requests\Request\StoreRequestRequest;
 use App\Http\Requests\Request\UpdateRequestStatusRequest;
@@ -158,7 +159,9 @@ class RequestController extends Controller
         ]);
 
         $newRequest = $requestServices->createRequest($data);
+        $newRequest->load('service.professional.user');
         $service = $newRequest->service;
+        $chat = null;
 
         if ($service) {
             $chat = $messageServices->getChatByParticipants($request->user()->id, $service->professional_id);
@@ -173,9 +176,9 @@ class RequestController extends Controller
             $messageServices->createMessage([
                 'sender_id' => $request->user()->id,
                 'chat_id' => $chat->id,
-                'message' => $newRequest->message,
+                'message' => 'New service request',
                 'message_type' => 'request',
-                'media_url' => null,
+                'media_url' => json_encode($this->buildRequestChatPayload($newRequest)),
             ]);
         }
 
@@ -183,9 +186,32 @@ class RequestController extends Controller
             'success' => true,
             'data' => [
                 'request' => $newRequest,
+                'chat_id' => $chat?->id,
             ],
             'message' => 'Request created successfully'
         ], 201);
+    }
+
+    protected function buildRequestChatPayload($request): array
+    {
+        $service = $request->service;
+        $professionalUser = $service?->professional?->user;
+
+        return [
+            'request_id' => $request->id,
+            'service_id' => $service?->id,
+            'service_title' => $service?->title,
+            'professional_name' => $professionalUser?->name,
+            'client_message' => $request->message,
+            'preferred_date' => $request->preferred_date
+                ? Carbon::parse($request->preferred_date)->format('Y-m-d')
+                : null,
+            'preferred_time' => $request->preferred_time,
+            'address' => $request->address,
+            'price' => $request->price !== null ? number_format((float) $request->price, 2, '.', '') : null,
+            'currency' => 'MAD',
+            'status' => $request->status,
+        ];
     }
 
     public function cancel(int $id, RequestServices $requestServices)

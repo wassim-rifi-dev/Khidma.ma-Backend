@@ -26,6 +26,7 @@ class ChatController extends Controller
                 ],
                 'last_message' => $chat->latestMessage?->message,
                 'last_message_type' => $chat->latestMessage?->message_type,
+                'last_message_media_url' => $chat->latestMessage?->media_url,
                 'last_message_sender_id' => $chat->latestMessage?->sender_id,
                 'last_message_at' => optional($chat->latestMessage?->created_at)->toISOString(),
                 'updated_at' => optional($chat->updated_at)->toISOString(),
