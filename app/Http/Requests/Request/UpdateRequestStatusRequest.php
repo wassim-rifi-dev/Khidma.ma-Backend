@@ -23,7 +23,7 @@ class UpdateRequestStatusRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status' => 'required|string|in:Nouveau,En_Cour,Terminer',
+            'status' => 'required|string|in:Nouveau,En_Cour,Terminer,Refuser',
         ];
     }
 }

@@ -28,7 +28,7 @@ class StoreRequestRequest extends FormRequest
             'address' => 'required|string|max:255',
             'preferred_date' => 'required|date|after_or_equal:today',
             'preferred_time' => 'required|date_format:H:i',
-            'status' => 'nullable|string|in:Nouveau,En_Cour,Terminer',
+            'status' => 'nullable|string|in:Nouveau,En_Cour,Terminer,Refuser',
         ];
     }
 }

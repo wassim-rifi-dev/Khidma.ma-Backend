@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Chat;
 use App\Models\Messages;
+use App\Models\Request as ServiceRequest;
 use Illuminate\Support\Collection;
 
 class MessageServices
@@ -100,5 +101,26 @@ class MessageServices
             ->where('id', '>', $afterId)
             ->oldest('id')
             ->get();
+    }
+
+    public function syncRequestPayload(ServiceRequest $request): void
+    {
+        $requestId = (int) $request->id;
+
+        Messages::where('message_type', 'request')
+            ->where('media_url', 'like', '%"request_id":'.$requestId.'%')
+            ->get()
+            ->each(function (Messages $message) use ($request) {
+                $payload = json_decode($message->media_url ?? '', true);
+
+                if (!is_array($payload)) {
+                    return;
+                }
+
+                $payload['status'] = $request->status;
+                $message->update([
+                    'media_url' => json_encode($payload),
+                ]);
+            });
     }
 }

@@ -253,7 +253,7 @@ class RequestController extends Controller
         ], 200);
     }
 
-    public function updateStatus(UpdateRequestStatusRequest $request, int $id, RequestServices $requestServices, ProfessionalServices $professionalServices) {
+    public function updateStatus(UpdateRequestStatusRequest $request, int $id, RequestServices $requestServices, ProfessionalServices $professionalServices, MessageServices $messageServices) {
         $professional = $professionalServices->getProfessionalInfo((int) $request->user()->id);
 
         if (!$professional) {
@@ -282,7 +282,25 @@ class RequestController extends Controller
             ], 403);
         }
 
-        $updatedRequest = $requestServices->updateRequestStatus($clientRequest, $request->validated()['status']);
+        $newStatus = $request->validated()['status'];
+        $updatedRequest = $requestServices->updateRequestStatus($clientRequest, $newStatus);
+        $updatedRequest->load('service.professional.user');
+
+        $messageServices->syncRequestPayload($updatedRequest);
+
+        $chat = $messageServices->getChatByParticipants((int) $updatedRequest->client_id, (int) $updatedRequest->service?->professional_id);
+
+        if ($chat && in_array($newStatus, ['En_Cour', 'Refuser'], true)) {
+            $messageServices->createMessage([
+                'sender_id' => $request->user()->id,
+                'chat_id' => $chat->id,
+                'message' => $newStatus === 'En_Cour'
+                    ? 'Request accepted. We can continue the conversation here.'
+                    : 'Request declined. Feel free to discuss details or send a new request.',
+                'message_type' => 'text',
+                'media_url' => null,
+            ]);
+        }
 
         return response()->json([
             'success' => true,
