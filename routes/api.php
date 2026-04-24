@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Admin\CategoryManagementController;
+use App\Http\Controllers\Admin\AdminAnalyticsController;
 use App\Http\Controllers\Admin\ProfessionalManagementController;
 use App\Http\Controllers\Admin\ServiceManagementController;
 use App\Http\Controllers\Admin\UserManagementController;
@@ -70,6 +71,7 @@ Route::middleware(['auth:sanctum', 'active'])->group(function() {
         Route::get('admin/services/count', [ServiceManagementController::class, 'publishedCount']); // show published services number
         Route::get('admin/requests/count/open', [RequestController::class, 'adminOpenRequestsCount']); // show open requests number
         Route::get('admin/requests/latest', [RequestController::class, 'adminLatestRequests']); // show latest requests for admin
+        Route::get('admin/analytics', [AdminAnalyticsController::class, 'index']); // show admin analytics overview
         Route::delete('admin/services/{id}', [ServiceManagementController::class, 'destroy']); // delete service for admin
 
         Route::get('admin/categories', [CategoryManagementController::class, 'index']); // show all categories for admin
