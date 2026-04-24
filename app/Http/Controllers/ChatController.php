@@ -16,6 +16,13 @@ class ChatController extends Controller
             $participant = $professional && $chat->professional_id === $professional->id
                 ? $chat->client
                 : $chat->professional?->user;
+            $participantRole = $participant?->role;
+            $participantLocation = $participantRole === 'professional'
+                ? $chat->professional?->city
+                : null;
+            $participantProfilePath = $participantRole === 'professional' && $chat->professional?->id
+                ? '/professional/' . $chat->professional->id
+                : null;
 
             return [
                 'id' => $chat->id,
@@ -23,6 +30,9 @@ class ChatController extends Controller
                     'id' => $participant?->id,
                     'name' => $participant?->name,
                     'photo' => $participant?->photo,
+                    'role' => $participantRole,
+                    'location' => $participantLocation,
+                    'profile_path' => $participantProfilePath,
                 ],
                 'last_message' => $chat->latestMessage?->message,
                 'last_message_type' => $chat->latestMessage?->message_type,
