@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
+use App\Mail\Common\ActionNotificationMail;
 use App\Mail\Request\RequestCreatedProfessionalMail;
 use App\Http\Requests\Request\StoreRequestRequest;
 use App\Http\Requests\Request\UpdateRequestStatusRequest;
@@ -252,6 +253,27 @@ class RequestController extends Controller
         }
 
         $canceledRequest = $requestService->cancelRequest($clientRequest);
+        $canceledRequest->loadMissing('service.professional.user', 'client');
+
+        $professionalUser = $canceledRequest->service?->professional?->user;
+
+        if ($professionalUser?->email) {
+            Mail::to($professionalUser->email)->send(new ActionNotificationMail(
+                'Une demande a ete annulee',
+                'Demande annulee',
+                'Bonjour ' . $professionalUser->name . ',',
+                'Un client a annule une demande en attente pour votre service.',
+                [
+                    'Service' => $canceledRequest->service?->title ?? 'N/A',
+                    'Client' => $canceledRequest->client?->name ?? 'N/A',
+                    'Date souhaitee' => $canceledRequest->preferred_date
+                        ? Carbon::parse($canceledRequest->preferred_date)->format('Y-m-d')
+                        : 'N/A',
+                ],
+                'Voir mes demandes',
+                url('/')
+            ));
+        }
 
         return response()->json([
             'success' => true,
@@ -324,6 +346,39 @@ class RequestController extends Controller
                 'message_type' => 'text',
                 'media_url' => null,
             ]);
+        }
+
+        $updatedRequest->loadMissing('client', 'service');
+        $clientUser = $updatedRequest->client;
+
+        if ($clientUser?->email) {
+            Mail::to($clientUser->email)->send(new ActionNotificationMail(
+                match ($newStatus) {
+                    'En_Cour' => 'Votre demande a ete acceptee',
+                    'Terminer' => 'Votre demande a ete marquee comme terminee',
+                    default => 'Votre demande a ete refusee',
+                },
+                match ($newStatus) {
+                    'En_Cour' => 'Demande acceptee',
+                    'Terminer' => 'Demande terminee',
+                    default => 'Demande refusee',
+                },
+                'Bonjour ' . $clientUser->name . ',',
+                match ($newStatus) {
+                    'En_Cour' => 'Le professionnel a accepte votre demande. Vous pouvez continuer l echange depuis votre espace.',
+                    'Terminer' => 'Le professionnel a marque la demande comme terminee. Vous pouvez maintenant laisser un avis.',
+                    default => 'Le professionnel a refuse votre demande. Vous pouvez discuter avec lui ou envoyer une nouvelle demande.',
+                },
+                [
+                    'Service' => $updatedRequest->service?->title ?? 'N/A',
+                    'Nouveau statut' => $newStatus,
+                    'Budget' => $updatedRequest->price !== null
+                        ? number_format((float) $updatedRequest->price, 2, '.', '') . ' MAD'
+                        : 'N/A',
+                ],
+                $newStatus === 'Terminer' ? 'Ouvrir mon espace' : 'Voir ma demande',
+                url('/')
+            ));
         }
 
         return response()->json([

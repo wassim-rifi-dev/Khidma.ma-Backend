@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UpdateUserStatusRequest;
+use App\Mail\Common\ActionNotificationMail;
 use App\Services\Admin\UserManagementService;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -91,6 +93,25 @@ class UserController extends Controller
             (bool) $request->validated()['is_active']
         );
 
+        if ($updatedUser->email) {
+            $isActive = (bool) $updatedUser->is_active;
+
+            Mail::to($updatedUser->email)->send(new ActionNotificationMail(
+                $isActive ? 'Votre compte a ete reactive' : 'Votre compte a ete desactive',
+                $isActive ? 'Compte actif' : 'Compte desactive',
+                'Bonjour ' . $updatedUser->name . ',',
+                $isActive
+                    ? 'Votre compte est de nouveau actif. Vous pouvez vous reconnecter et continuer a utiliser la plateforme.'
+                    : 'Votre compte a ete desactive par un administrateur. Si vous pensez qu il s agit d une erreur, contactez le support.',
+                [
+                    'Role' => $updatedUser->role,
+                    'Statut' => $isActive ? 'Actif' : 'Desactive',
+                ],
+                $isActive ? 'Se connecter' : null,
+                $isActive ? url('/') : null
+            ));
+        }
+
         return response()->json([
             'success' => true,
             'data' => [
@@ -121,6 +142,19 @@ class UserController extends Controller
         }
 
         $userManagementService->deleteUser($user);
+
+        if ($user->email) {
+            Mail::to($user->email)->send(new ActionNotificationMail(
+                'Votre compte a ete supprime',
+                'Compte supprime',
+                'Bonjour ' . $user->name . ',',
+                'Votre compte a ete supprime par un administrateur. Si vous souhaitez plus d informations, merci de contacter le support.',
+                [
+                    'Email' => $user->email,
+                    'Role' => $user->role,
+                ]
+            ));
+        }
 
         return response()->json([
             'success' => true,

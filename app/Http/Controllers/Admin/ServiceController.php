@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\Common\ActionNotificationMail;
 use App\Services\Service\ServiceService;
+use Illuminate\Support\Facades\Mail;
 
 class ServiceController extends Controller
 {
@@ -44,7 +46,26 @@ class ServiceController extends Controller
             ], 404);
         }
 
+        $service->loadMissing('professional.user', 'category');
         $serviceService->deleteService($service);
+
+        $professionalUser = $service->professional?->user;
+
+        if ($professionalUser?->email) {
+            Mail::to($professionalUser->email)->send(new ActionNotificationMail(
+                'Votre service a ete retire',
+                'Service retire',
+                'Bonjour ' . $professionalUser->name . ',',
+                'Un administrateur a retire un de vos services de la plateforme.',
+                [
+                    'Service' => $service->title,
+                    'Categorie' => $service->category?->name ?? 'N/A',
+                    'Ville' => $service->city ?? 'N/A',
+                ],
+                'Voir mes services',
+                url('/')
+            ));
+        }
 
         return response()->json([
             'success' => true,

@@ -30,7 +30,7 @@ class RequestCreatedProfessionalMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'mail.Professional.RequestCreated',
+            view: 'Mail.Professional.RequestCreated',
         );
     }
 

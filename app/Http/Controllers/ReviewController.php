@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Review\StoreReviewRequest;
+use App\Mail\Common\ActionNotificationMail;
 use App\Services\Request\RequestService;
 use App\Services\Review\ReviewService;
+use Illuminate\Support\Facades\Mail;
 
 class ReviewController extends Controller
 {
@@ -88,6 +90,25 @@ class ReviewController extends Controller
         if ($order->service) {
             $reviewService->updateServiceRating($order->service->id);
             $reviewService->updateProfessionalRating($order->service->professional_id);
+        }
+
+        $order->loadMissing('service.professional.user');
+        $professionalUser = $order->service?->professional?->user;
+
+        if ($professionalUser?->email) {
+            Mail::to($professionalUser->email)->send(new ActionNotificationMail(
+                'Vous avez recu un nouvel avis',
+                'Nouvel avis client',
+                'Bonjour ' . $professionalUser->name . ',',
+                'Un client vient de laisser un avis sur une prestation terminee.',
+                [
+                    'Service' => $order->service?->title ?? 'N/A',
+                    'Note' => number_format((float) $review->rating, 1) . '/5',
+                    'Client' => $request->user()->name,
+                ],
+                'Consulter mon profil',
+                url('/')
+            ));
         }
 
         return response()->json([

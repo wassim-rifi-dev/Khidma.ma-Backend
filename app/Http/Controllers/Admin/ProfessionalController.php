@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Professional\UpdateProfessionalVerifyRequest;
+use App\Mail\Common\ActionNotificationMail;
 use App\Services\Professional\ProfessionalService;
+use Illuminate\Support\Facades\Mail;
 
 class ProfessionalController extends Controller
 {
@@ -49,6 +51,28 @@ class ProfessionalController extends Controller
             $professional,
             (bool) $request->validated()['is_verified']
         );
+
+        $professionalUser = $updatedProfessional->user;
+
+        if ($professionalUser?->email) {
+            $isVerified = (bool) $updatedProfessional->is_verified;
+
+            Mail::to($professionalUser->email)->send(new ActionNotificationMail(
+                $isVerified ? 'Votre profil professionnel a ete valide' : 'Mise a jour de votre verification professionnelle',
+                $isVerified ? 'Profil valide' : 'Verification mise a jour',
+                'Bonjour ' . $professionalUser->name . ',',
+                $isVerified
+                    ? 'Votre compte professionnel est maintenant verifie. Vous pouvez continuer a publier et gerer vos services.'
+                    : 'Le statut de verification de votre compte professionnel a ete mis a jour. Consultez votre espace pour voir les changements.',
+                [
+                    'Categorie' => $updatedProfessional->category?->name ?? 'N/A',
+                    'Statut' => $isVerified ? 'Verifie' : 'Non verifie',
+                ],
+                'Ouvrir mon espace',
+                url('/'),
+                'Merci de garder votre profil complet et a jour.'
+            ));
+        }
 
         return response()->json([
             'success' => true,
