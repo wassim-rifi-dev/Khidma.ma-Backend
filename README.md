@@ -1,58 +1,143 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Khidma.ma Backend
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <strong>Laravel API for the Khidma.ma services marketplace.</strong>
 </p>
 
-## About Laravel
+## Overview
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+This backend provides the core business logic and API for Khidma.ma. It handles:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Authentication and role-based access
+- Services, categories, requests, and reviews
+- Professional dashboards and analytics
+- Admin moderation and platform insights
+- Chat conversations and messaging
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Stack
 
-## Learning Laravel
+- PHP 8.3
+- Laravel 13
+- Laravel Sanctum
+- MySQL
+- PHPUnit
+- Laravel Pint
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Architecture
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+The application follows a layered structure:
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+- `app/Http/Controllers`: HTTP endpoints
+- `app/Models`: Eloquent models and relationships
+- `app/Services`: business logic grouped by domain
+- `routes/api.php`: API route definitions
+- `database/`: migrations, factories, and seeders
 
-## Agentic Development
+Service domains currently include:
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+- `Admin`
+- `Auth`
+- `Category`
+- `Chat`
+- `Professional`
+- `Request`
+- `Review`
+- `Service`
+
+## Authentication And Roles
+
+Authentication is managed with Laravel Sanctum.
+
+Main roles used by the API:
+
+- `admin`
+- `professional`
+- `client`
+
+Protected routes are grouped with middleware such as:
+
+- `auth:sanctum`
+- `active`
+- `role:admin`
+- `role:professional`
+- `role:client,professional`
+
+## Important API Areas
+
+- Auth: register, login, logout
+- Categories: public listing and admin management
+- Services: browse, view, create, update, soft delete, restore
+- Requests: client booking flow and professional request handling
+- Reviews: service feedback and ratings
+- Chat: direct conversations and messages
+- Admin: user moderation, service moderation, analytics
+
+## Environment Setup
+
+Copy the example environment and update the database credentials:
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+copy .env.example .env
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Important variables from `.env.example`:
 
-## Contributing
+```env
+APP_NAME=Khidma.ma
+APP_URL=http://localhost:8000
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=khidma
+DB_USERNAME=root
+DB_PASSWORD=your_password
 
-## Code of Conduct
+FILESYSTEM_DISK=local
+QUEUE_CONNECTION=database
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Local Setup
 
-## Security Vulnerabilities
+```bash
+composer install
+php artisan key:generate
+php artisan migrate
+php artisan storage:link
+php artisan serve
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Default local URL:
 
-## License
+```text
+http://localhost:8000
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Composer Scripts
+
+- `composer run setup`: install dependencies, prepare `.env`, generate key, migrate, install frontend dependencies, and build assets
+- `composer run dev`: run local development services together
+- `composer run test`: clear config and execute tests
+
+## Testing And Quality
+
+```bash
+php artisan test
+```
+
+Optional formatting:
+
+```bash
+./vendor/bin/pint
+```
+
+## Notes
+
+- API routes are defined in [`routes/api.php`](./routes/api.php)
+- Business logic is intentionally moved into `app/Services`
+- The project expects the frontend app in `../Frontend` to consume this API
+
+## Related Docs
+
+- Root project guide: [`../README.md`](../README.md)
+- Frontend app guide: [`../Frontend/README.md`](../Frontend/README.md)
