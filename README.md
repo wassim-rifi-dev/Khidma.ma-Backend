@@ -1,8 +1,18 @@
 # Khidma.ma Backend
 
-<p align="center">
-  <strong>Laravel API for the Khidma.ma services marketplace.</strong>
-</p>
+<div align="center">
+  <h3>Laravel API powering the Khidma.ma services marketplace</h3>
+  <p>
+    <img src="https://img.shields.io/badge/Laravel-13-f97316?style=for-the-badge&logo=laravel" alt="Laravel 13" />
+    <img src="https://img.shields.io/badge/PHP-8.3-1d4ed8?style=for-the-badge&logo=php" alt="PHP 8.3" />
+    <img src="https://img.shields.io/badge/Auth-Sanctum-0f172a?style=for-the-badge" alt="Sanctum" />
+    <img src="https://img.shields.io/badge/Database-MySQL-0891b2?style=for-the-badge&logo=mysql" alt="MySQL" />
+  </p>
+</div>
+
+---
+
+> This backend centralizes authentication, marketplace operations, messaging, moderation, and analytics through a structured Laravel API.
 
 ## Overview
 
@@ -22,6 +32,17 @@ This backend provides the core business logic and API for Khidma.ma. It handles:
 - MySQL
 - PHPUnit
 - Laravel Pint
+
+## Backend Domains
+
+| Domain | Responsibility |
+| --- | --- |
+| Auth | Registration, login, logout, access control |
+| Service | Service CRUD, media, listing, restore |
+| Request | Booking and status flow |
+| Review | Ratings and feedback |
+| Chat | Conversations and messages |
+| Admin | Moderation and analytics |
 
 ## Architecture
 
