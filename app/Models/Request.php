@@ -37,6 +37,6 @@ class Request extends Model
     }
 
     public function review() {
-        return $this->hasOne(Reviews::class, 'order_id');
+        return $this->hasOne(Review::class, 'order_id');
     }
 }

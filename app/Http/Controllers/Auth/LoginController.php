@@ -4,14 +4,14 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
-use App\Services\AuthServices;
-use App\Services\ProfessionalServices;
+use App\Services\Auth\AuthService;
+use App\Services\Professional\ProfessionalService;
 use Hash;
 
 class LoginController extends Controller
 {
-    public function login(LoginRequest $loginRequest , AuthServices $authServices , ProfessionalServices $professionalServices) {
-        $user = $authServices->existeEmail($loginRequest->email);
+    public function login(LoginRequest $loginRequest , AuthService $authService , ProfessionalService $professionalService) {
+        $user = $authService->existeEmail($loginRequest->email);
 
         if (!$user) {
             return response()->json(
@@ -51,7 +51,7 @@ class LoginController extends Controller
         $professional = null;
 
         if ($user->role === 'professional') {
-            $professional = $professionalServices->getProfessionalInfo($user->id);
+            $professional = $professionalService->getProfessionalInfo($user->id);
         }
 
 

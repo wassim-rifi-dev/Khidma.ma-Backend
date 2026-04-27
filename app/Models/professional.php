@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class professional extends Model
+class Professional extends Model
 {
     use HasFactory;
 
@@ -38,7 +38,7 @@ class professional extends Model
 
     public function categorie()
     {
-        return $this->belongsTo(Categories::class, 'categorie_id');
+        return $this->belongsTo(Category::class, 'categorie_id');
     }
 
     public function category()

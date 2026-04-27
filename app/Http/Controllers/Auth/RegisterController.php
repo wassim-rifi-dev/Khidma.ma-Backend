@@ -4,17 +4,17 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterRequest;
-use App\Mail\RegisterMAil;
-use App\Services\AuthServices;
-use App\Services\ProfessionalServices;
+use App\Mail\Auth\RegisterMail;
+use App\Services\Auth\AuthService;
+use App\Services\Professional\ProfessionalService;
 use Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
 class RegisterController extends Controller
 {
-    public function register(RegisterRequest $registerRequest , AuthServices $authServices, ProfessionalServices $professionalServices) {
-        $existeUser = $authServices->existeEmail($registerRequest->email);
+    public function register(RegisterRequest $registerRequest , AuthService $authService, ProfessionalService $professionalService) {
+        $existeUser = $authService->existeEmail($registerRequest->email);
         if ($existeUser) {
             return response()->json(
                 [
@@ -36,10 +36,10 @@ class RegisterController extends Controller
             'password' => Hash::make($registerRequest->password),
         ];
 
-        $user = $authServices->createNewUser($data);
+        $user = $authService->createNewUser($data);
 
         if ($user->role === 'professional') {
-            $category = $professionalServices->getCategoryByName($registerRequest->category);
+            $category = $professionalService->getCategoryByName($registerRequest->category);
 
             if (!$category) {
                 return response()->json([
@@ -56,12 +56,12 @@ class RegisterController extends Controller
                 'description' => $registerRequest->description,
             ];
 
-            $professional = $professionalServices->create($professionalData);
+            $professional = $professionalService->create($professionalData);
         }
 
         $token = $user->createToken('auth-token')->plainTextToken;
 
-        Mail::to($user->email)->send(new RegisterMAil($user));
+        Mail::to($user->email)->send(new RegisterMail($user));
 
         if ($user->role === 'professional') {
             return response()->json([

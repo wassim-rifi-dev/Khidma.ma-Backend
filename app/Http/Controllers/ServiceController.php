@@ -2,79 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Service\StoreServiceRequest;
-use App\Http\Requests\Service\UpdateServiceRequest;
-use App\Mail\ServiceCreactionMail;
-use App\Services\ProfessionalServices;
-use App\Services\ServiceServices;
+use App\Services\Service\ServiceService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 
 class ServiceController extends Controller
 {
-    public function index(Request $request, ServiceServices $serviceServices) {
+    public function index(Request $request, ServiceService $serviceService) {
         $perPage = (int) $request->query('per_page', 10);
         $perPage = $perPage > 0 ? min($perPage, 50) : 10;
         $filters = $request->only(['query', 'category', 'city', 'sort']);
 
-        $services = $serviceServices->getAllServices($perPage, $filters);
+        $services = $serviceService->getAllServices($perPage, $filters);
 
         return response()->json([
             'success' => true,
             'data' => [
                 'services' => $services,
-                'cities' => $serviceServices->getServiceCities(),
+                'cities' => $serviceService->getServiceCities(),
             ],
             'message' => "C'est sa les services"
         ], 200);
     }
 
-    public function professionalServices(Request $request, ServiceServices $serviceServices, ProfessionalServices $professionalServices) {
-        $professional = $professionalServices->getProfessionalInfo((int) $request->user()->id);
-
-        if (!$professional) {
-            return response()->json([
-                'success' => false,
-                'data' => [],
-                'message' => 'Professional profile not found'
-            ], 404);
-        }
-
-        $services = $serviceServices->getServicesByProfessional($professional->id);
-
-        return response()->json([
-            'success' => true,
-            'data' => [
-                'services' => $services,
-            ],
-            'message' => 'Professional services retrieved successfully'
-        ], 200);
-    }
-
-    public function professionalServicesSummary(Request $request, ServiceServices $serviceServices, ProfessionalServices $professionalServices) {
-        $professional = $professionalServices->getProfessionalInfo((int) $request->user()->id);
-
-        if (!$professional) {
-            return response()->json([
-                'success' => false,
-                'data' => [],
-                'message' => 'Professional profile not found'
-            ], 404);
-        }
-
-        $summary = $serviceServices->getProfessionalServicesSummary($professional->id);
-
-        return response()->json([
-            'success' => true,
-            'data' => [
-                'summary' => $summary,
-            ],
-            'message' => 'Professional services summary retrieved successfully'
-        ], 200);
-    }
-
-    public function show(int $id, ServiceServices $serviceServices) {
-        $service = $serviceServices->getServiceDetailsById($id);
+    public function show(int $id, ServiceService $serviceService) {
+        $service = $serviceService->getServiceDetailsById($id);
 
         if (!$service) {
             return response()->json([
@@ -93,179 +44,4 @@ class ServiceController extends Controller
         ], 200);
     }
 
-    public function trashed(ServiceServices $serviceServices, ProfessionalServices $professionalServices) {
-        $professional = $professionalServices->getProfessionalInfo((int) request()->user()->id);
-
-        if (!$professional) {
-            return response()->json([
-                'success' => false,
-                'data' => [],
-                'message' => 'Professional profile not found'
-            ], 404);
-        }
-
-        $services = $serviceServices->getDeletedServicesByProfessional($professional->id);
-
-        return response()->json([
-            'success' => true,
-            'data' => [
-                'services' => $services,
-            ],
-            'message' => 'Deleted services retrieved successfully'
-        ], 200);
-    }
-
-    public function store(StoreServiceRequest $request, ServiceServices $serviceServices, ProfessionalServices $professionalServices) {
-        $user = $request->user();
-
-        $professional = $professionalServices->getProfessionalInfo((int) $user->id);
-
-        if (!$professional) {
-            return response()->json([
-                'success' => false,
-                'data' => [],
-                'message' => 'Professional profile not found'
-            ], 404);
-        }
-
-        $data = array_merge($request->validated(), [
-            'professional_id' => $professional->id,
-            'categorie_id' => $professional->categorie_id,
-        ]);
-
-        unset($data['cover_image'], $data['gallery_images']);
-
-        $service = $serviceServices->createServices(
-            $data,
-            $request->file('cover_image'),
-            $request->file('gallery_images', [])
-        );
-        Mail::to($user->email)->send(new ServiceCreactionMail($service));
-
-        return response()->json([
-            'success' => true,
-            'data' => [
-                'service' => $service,
-            ],
-            'message' => 'Service created successfully'
-        ], 201);
-    }
-
-    public function update(UpdateServiceRequest $request, int $id, ServiceServices $serviceServices, ProfessionalServices $professionalServices) {
-        $professional = $professionalServices->getProfessionalInfo((int) $request->user()->id);
-
-        if (!$professional) {
-            return response()->json([
-                'success' => false,
-                'data' => [],
-                'message' => 'Professional profile not found'
-            ], 404);
-        }
-
-        $service = $serviceServices->getServiceById($id);
-
-        if (!$service) {
-            return response()->json([
-                'success' => false,
-                'data' => [],
-                'message' => 'Service not found'
-            ], 404);
-        }
-
-        if ($service->professional_id !== $professional->id) {
-            return response()->json([
-                'success' => false,
-                'data' => [],
-                'message' => 'Unauthorized'
-            ], 403);
-        }
-
-        $updatedService = $serviceServices->updateService($service, $request->validated());
-
-        return response()->json([
-            'success' => true,
-            'data' => [
-                'service' => $updatedService,
-            ],
-            'message' => 'Service updated successfully'
-        ], 200);
-    }
-
-    public function destroy(int $id, ServiceServices $serviceServices, ProfessionalServices $professionalServices) {
-        $professional = $professionalServices->getProfessionalInfo((int) request()->user()->id);
-
-        if (!$professional) {
-            return response()->json([
-                'success' => false,
-                'data' => [],
-                'message' => 'Professional profile not found'
-            ], 404);
-        }
-
-        $service = $serviceServices->getServiceById($id);
-
-        if (!$service) {
-            return response()->json([
-                'success' => false,
-                'data' => [],
-                'message' => 'Service not found'
-            ], 404);
-        }
-
-        if ($service->professional_id !== $professional->id) {
-            return response()->json([
-                'success' => false,
-                'data' => [],
-                'message' => 'Unauthorized'
-            ], 403);
-        }
-
-        $serviceServices->deleteService($service);
-
-        return response()->json([
-            'success' => true,
-            'data' => [],
-            'message' => 'Service deleted successfully'
-        ], 200);
-    }
-
-    public function restore(int $id, ServiceServices $serviceServices, ProfessionalServices $professionalServices) {
-        $professional = $professionalServices->getProfessionalInfo((int) request()->user()->id);
-
-        if (!$professional) {
-            return response()->json([
-                'success' => false,
-                'data' => [],
-                'message' => 'Professional profile not found'
-            ], 404);
-        }
-
-        $service = $serviceServices->getDeletedServiceById($id);
-
-        if (!$service) {
-            return response()->json([
-                'success' => false,
-                'data' => [],
-                'message' => 'Deleted service not found'
-            ], 404);
-        }
-
-        if ($service->professional_id !== $professional->id) {
-            return response()->json([
-                'success' => false,
-                'data' => [],
-                'message' => 'Unauthorized'
-            ], 403);
-        }
-
-        $restoredService = $serviceServices->restoreService($service);
-
-        return response()->json([
-            'success' => true,
-            'data' => [
-                'service' => $restoredService,
-            ],
-            'message' => 'Service restored successfully'
-        ], 200);
-    }
 }

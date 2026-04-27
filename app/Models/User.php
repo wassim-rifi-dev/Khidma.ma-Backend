@@ -46,7 +46,7 @@ class User extends Authenticatable
 
     public function professional()
     {
-        return $this->hasOne(professional::class, 'user_id');
+        return $this->hasOne(Professional::class, 'user_id');
     }
 
     public function requests()
@@ -56,7 +56,7 @@ class User extends Authenticatable
 
     public function reviews()
     {
-        return $this->hasMany(Reviews::class, 'client_id');
+        return $this->hasMany(Review::class, 'client_id');
     }
 
     public function chats()
@@ -66,6 +66,6 @@ class User extends Authenticatable
 
     public function messages()
     {
-        return $this->hasMany(Messages::class, 'sender_id');
+        return $this->hasMany(Message::class, 'sender_id');
     }
 }

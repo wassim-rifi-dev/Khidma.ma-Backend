@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\CategoryServices;
-use Illuminate\Http\Request;
+use App\Services\Category\CategoryService;
 
 class CategoryController extends Controller
 {
-    public function index(CategoryServices $categoryServices) {
-        $categories = $categoryServices->getAllCategory();
+    public function index(CategoryService $categoryService) {
+        $categories = $categoryService->getAllCategory();
 
         return response()->json([
             'success' => true,

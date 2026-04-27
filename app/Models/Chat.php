@@ -18,16 +18,16 @@ class Chat extends Model
 
     public function professional()
     {
-        return $this->belongsTo(professional::class, 'professional_id');
+        return $this->belongsTo(Professional::class, 'professional_id');
     }
 
     public function messages()
     {
-        return $this->hasMany(Messages::class, 'chat_id');
+        return $this->hasMany(Message::class, 'chat_id');
     }
 
     public function latestMessage()
     {
-        return $this->hasOne(Messages::class, 'chat_id')->latestOfMany();
+        return $this->hasOne(Message::class, 'chat_id')->latestOfMany();
     }
 }
